@@ -44,18 +44,18 @@ def parse_args():
                            '\n' + \
                            'Use "%prog help subcommands" for a list of subcommands')
     parser.disable_interspersed_args()
-    parser.add_option('-d', '--debug', action='store_true',
+    parser.add_option('-d', '--debug', action='store_true', default=False,
                       dest='debug', help='enter debug mode [False]')
-    parser.add_option('-q', '--quiet', action='store_true',
+    parser.add_option('-q', '--quiet', action='store_true', default=False,
+                      dest='quiet', help='do not produce output [False]')
+    parser.add_option('-q', '--verbose', action='store_true', default=False
                       dest='quiet', help='do not be verbose [False]')
-    parser.add_option('-s', '--stop-on-error', action='store_true',
-                     dest='stop_on_error', help='stop on error [False]')
     (options, arguments) = parser.parse_args()
     opts.debug = options.debug
     opts.quiet = options.quiet
-    opts.stop_on_error = options.stop_on_error
+    opts.verbose = options.verbose
     if not arguments:
-        parser.error("Arguments required. Use '--help' for details")
+        parser.error("Subcommand required. Use '--help' for details")
         sys.exit(1)
     subcmd = arguments[0]
     subcmd_args = arguments[1:]
