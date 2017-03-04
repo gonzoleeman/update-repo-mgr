@@ -23,10 +23,10 @@ class Repo(abc.ABC):
 
     @abc.abstractmethod
     def is_mine(cls, repo_dir):
-        """Is the supplied directory 'mine'?"""
+        """class method: Is the supplied directory 'mine'?"""
 
     @abc.abstractmethod
-    def update(self, stop_on_error=True, verbosity=0):
+    def update(self, stop_on_error=True):
         """Update this repo"""
 
     @abc.abstractmethod

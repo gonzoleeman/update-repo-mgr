@@ -15,7 +15,7 @@ def handle_rm(db, rm_args):
     dprint("handling 'rm' args=%s subcommand" % rm_args)
 
     parser = OptionParser(usage='Usage: %prog [program_options] rm PATHNAME')
-    (options, arguments) = parser.parse_args(add_args)
+    (options, arguments) = parser.parse_args(rm_args)
 
     if len(arguments) != 1:
         parser.error("Must supply one pathname")

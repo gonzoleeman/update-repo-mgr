@@ -8,9 +8,7 @@ import os
 from optparse import OptionParser
 
 from update_manager.Util import dprint
-from update_manager.GitRepo import GitRepo
-from update_manager.SvnRepo import SvnRepo
-from update_manager.OscRepo import OscRepo
+from update_manager.repos import find_owner
 
 
 def handle_add(db, add_args):
@@ -38,13 +36,9 @@ def handle_add(db, add_args):
         print("error: path already present: %s" % repo_path, file=sys.stderr)
         sys.exit(1)
 
-    if GitRepo.is_mine(repo_path):
-        repo_type = 'git'
-    elif SvnRepo.is_mine(repo_path):
-        repo_type = 'svn'
-    elif OscRepo.is_mine(repo_path):
-        repo_type = 'osc'
-    else:
+    repo_type = find_owner(repo_path)
+
+    if repo_type is None:
         print("error: unknown repo type: %s" % repo_path, file=sys.stderr)
         sys.exit(1)
 

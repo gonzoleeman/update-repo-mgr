@@ -21,11 +21,11 @@ class OscRepo(Repo):
         dprint("Looking for '.osc' subdirectory under '%s' ..." % repo_dir)
         return os.path.isdir('%s/.osc' % repo_dir)
         
-    def update(self, stop_on_error=True, verbosity=0):
-        dprint("osc update (s=%s, v=%s)" % (stop_on_error, verbosity))
+    def update(self, stop_on_error=True):
+        dprint("osc update (s=%s)" % stop_on_error)
         dprint("NYI: Should run 'osc update' in our directory ...")
         return True
 
-    def clean(self, cleaning_level=1, verbosity=0):
-        dprint("osc clean (c=%s, v=%s) is a NOOP" % (cleaning_level, verbosity))
+    def clean(self, cleaning_level=1):
+        dprint("osc clean (c=%s) is a NOOP" % cleaning_level)
         return True

@@ -16,6 +16,7 @@ from update_manager.Database import Database
 from update_manager.list import handle_list
 from update_manager.add import handle_add
 from update_manager.rm import handle_rm
+from update_manager.update import handle_update
 
 __version__ = '0.1'
 __author__ = "Lee Duncan"

@@ -20,10 +20,12 @@ def dprint(*args):
 def vprint(*args):
     if opts.quiet:
         return
-    print('==> ', end='')
+    print('***')
+    print('*** ', end='')
     for arg in args:
         print(arg + ' ', end='')
     print()
+    print('***')
 
 def run_cmd_in_dir(dir_path, cmd_arr):
     """'cd' to dir_path, then run supplied command, waiting for result"""
