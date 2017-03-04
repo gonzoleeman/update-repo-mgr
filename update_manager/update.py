@@ -7,7 +7,7 @@ import sys
 import os
 from optparse import OptionParser
 
-from update_manager.Util import dprint
+from update_manager.Util import dprint, vprint
 from update_manager.repos import update_repo
 
 
@@ -31,7 +31,7 @@ def handle_update(db, update_args):
 
     for repo_dir in sorted(db.db_dict.keys()):
         repo_type = db.db_dict[repo_dir]
-        print("Need to update '%s' using '%s'" % (repo_dir, repo_type))
+        vprint("Need to update '%s' using '%s'" % (repo_dir, repo_type))
         res = update_repo(repo_dir, repo_type)
         # if error and stop-on-error then stop
         # else mark directory 'k' as 'done'
