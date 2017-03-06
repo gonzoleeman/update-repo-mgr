@@ -7,7 +7,7 @@ Repository Class
 import os
 import abc
 
-from update_manager.Util import dprint, vprint
+from update_manager.Util import dprint
 
 
 class Repo(abc.ABC):

@@ -7,7 +7,7 @@ import os
 import abc
 from optparse import OptionParser
 
-from update_manager.Util import dprint, vprint
+from update_manager.Util import dprint
 
 class SubCommand(abc.ABC):
     """

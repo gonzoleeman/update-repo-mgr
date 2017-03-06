@@ -7,7 +7,7 @@ import os
 import sys
 
 from update_manager import opts, DEFAULT_DB_DIR, DB_FILE
-from update_manager.Util import dprint, vprint
+from update_manager.Util import dprint, print_info
 
 DB_HEADER = '#\n# Database file -- do not edit\n#\n'
 DB_HEADER_LEN = len(DB_HEADER)
@@ -30,7 +30,7 @@ class Database:
     def ensure_ur_dir(self):
         """Create the 'ur' directory, if needed"""
         if not os.path.isdir(self.ur_dir):
-            vprint("No DB dir ... creating one (%s) ..." % self.ur_dir)
+            print_info("No DB dir ... creating one (%s) ..." % self.ur_dir)
             try:
                 os.mkdir(self.ur_dir)
             except (PermissionError, FileNotFoundError) as err:

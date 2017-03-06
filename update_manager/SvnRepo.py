@@ -7,7 +7,7 @@ svn (subversion) Repository Class
 import os
 import abc
 
-from update_manager.Util import dprint, vprint
+from update_manager.Util import dprint
 from update_manager.Repo import Repo
 
 class SvnRepo(Repo):

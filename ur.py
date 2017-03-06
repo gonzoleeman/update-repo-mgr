@@ -34,12 +34,9 @@ def parse_args():
                       help='enter debug mode [False]')
     parser.add_option('-q', '--quiet', action='store_true', default=False,
                       help='do not produce output [False]')
-    parser.add_option('-v', '--verbose', action='store_true', default=False,
-                      help='do not be verbose [False]')
     (options, arguments) = parser.parse_args()
     opts.debug = options.debug
     opts.quiet = options.quiet
-    opts.verbose = options.verbose
     if not arguments:
         parser.error("Subcommand required. Use '--help' for details")
         sys.exit(1)

@@ -7,8 +7,9 @@ Git Repository Class
 import os
 import abc
 
-from update_manager.Util import dprint, vprint
+from update_manager.Util import dprint, run_cmd_in_dir
 from update_manager.Repo import Repo
+from update_manager import opts
 
 class GitRepo(Repo):
 
@@ -21,10 +22,12 @@ class GitRepo(Repo):
         dprint("Looking for '.git' subdirectory under '%s' ..." % repo_dir)
         return os.path.isdir('%s/.git' % repo_dir)
 
-    def update(self, stop_on_error=True):
-        dprint("git update (s=%s)" % stop_on_error)
-        dprint("NYI: Should run 'git pull -v' in our directory ...")
-        return True
+    def update(self, opts):
+        dprint("'git' 'update' (opts=%s)" % opts)
+        git_cmd = ['git', 'pull']
+        if opts.verbose:
+            git_cmd.append('-v')
+        run_cmd_in_dir(self.repo_dir, git_cmd, stop_on_error=opts.stop_on_error)
 
     def clean(self, cleaning_level=1):
         dprint("git clean (c=%s)" % cleaning_level)
