@@ -28,9 +28,8 @@ class UpdateSubCommand(SubCommand):
         """Handle the 'update' subcommand"""
         dprint("handling 'update' args=%s subcommand" % cmd_args)
         (options, arguments) = self.parser.parse_args(cmd_args)
-        dprint("options:", options)
         if len(arguments) != 0:
-            parser.error("No arguments needed")
+            self.parser.error("No arguments needed")
             sys.exit(1)
         # check for interrupted update in progress
         # if update-in-progress and not continuing then error exit

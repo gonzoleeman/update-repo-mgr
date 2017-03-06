@@ -26,7 +26,7 @@ def parse_args():
     
     parser = OptionParser(version='%prog ' + __version__,
                           usage=\
-                           'Usage: %prog [options] SUBCOMMAND\n' + \
+                           'Usage: %prog [options] SUBCOMMAND [SUBCMD_OPTS]\n' + \
                            '\n' + \
                            'Use "%prog help subcommands" for a list of subcommands')
     parser.disable_interspersed_args()
@@ -45,11 +45,6 @@ def parse_args():
     if not subcmd_in_list(subcmd):
         parser.error("Unrecognized subcommand: '%s'." % subcmd)
         sys.exit(1)
-    dprint("Handling subcommand:", subcmd)
-    if subcmd == 'help' and not subcmd_args:
-        # treat this like "--help"
-        parser.print_help()
-        sys.exit(0)
     return (parser, subcmd, subcmd_args)
 
 
@@ -57,8 +52,7 @@ def main():
     """Main entry point"""
     (parser, subcmd, subcmd_args) = parse_args()
     db = Database()
-    res = handle_subcmd(db, parser, subcmd, subcmd_args)
-    return res
+    return handle_subcmd(db, parser, subcmd, subcmd_args)
 
 
 if __name__ == '__main__':
