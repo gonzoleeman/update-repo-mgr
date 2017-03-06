@@ -46,13 +46,14 @@ class UpdateSubCommand(SubCommand):
             repo_type = self.db.db_dict[repo_dir]
             print_info("Updating '%s' using '%s'" % (repo_dir, repo_type))
             res = update_repo(repo_dir, repo_type, options)
+            dprint("update_repo: returned:", res)
             if res:
                 failures = failures + 1
                 failure_list.append(repo_dir)
             else:
                 successes = successes + 1
             if res and options.stop_on_error:
-                print_info("Stopping because of error at '%s': %d" %
+                print_info("Stopping because of error at '%s'; return=%d" %
                            (repo_dir, res))
                 sys.exit(1)
             # mark directory as 'done'

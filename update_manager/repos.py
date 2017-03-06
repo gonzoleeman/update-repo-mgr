@@ -4,6 +4,8 @@ The repository top-level interface. This should be the only place that
 knows about individual repo types and abstracts it for others.
 """
 
+import sys
+
 from update_manager.Util import dprint
 from update_manager.GitRepo import GitRepo
 from update_manager.SvnRepo import SvnRepo
@@ -36,11 +38,19 @@ def find_owner(repo_dir):
 def update_repo(repo_dir, repo_type, opts):
     dprint("update_repo called (%s, %s)..." % (repo_dir, repo_type))
     repo_obj_name = __repo_dict[repo_type]
-    repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
-    return repo_obj.update(opts)
+    try:
+        repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
+        res = repo_obj.update(opts)
+    except FileNotFoundError:
+        print("error: directy gone: %s" % repo_dir, file=sys.stderr)
+        print("Consider using the 'rm' subcommand to remove it")
+        return 1
+    dprint("update_repo: returning:", res)
+    return res
 
 def clean_repo(repo_dir, repo_type, opts):
     dprint("update_repo called (%s, %s)..." % (repo_dir, repo_type))
     repo_obj_name = __repo_dict[repo_type]
     repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
-    return repo_obj.clean(opts)
+    res = repo_obj.clean(opts)
+    return res

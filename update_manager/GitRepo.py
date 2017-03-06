@@ -41,6 +41,7 @@ class GitRepo(Repo):
         if opts.verbose:
             git_cmd.append('-v')
         res = run_cmd_in_dir(self.repo_dir, git_cmd)
+        dprint("'update' for git returning:", res)
         return res
 
     def clean(self, opts):

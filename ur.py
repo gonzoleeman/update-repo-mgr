@@ -53,7 +53,12 @@ def main():
     """Main entry point"""
     (parser, subcmd, subcmd_args) = parse_args()
     db = Database()
-    return handle_subcmd(db, parser, subcmd, subcmd_args)
+    try:
+        res = handle_subcmd(db, parser, subcmd, subcmd_args)
+    except KeyboardInterrupt:
+        print("\nInterrupted")
+        return 1
+    return res
 
 
 if __name__ == '__main__':
