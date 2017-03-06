@@ -12,12 +12,14 @@ from update_manager.ListSubCommand import ListSubCommand
 from update_manager.AddSubCommand import AddSubCommand
 from update_manager.RmSubCommand import RmSubCommand
 from update_manager.UpdateSubCommand import UpdateSubCommand
+from update_manager.CleanSubCommand import CleanSubCommand
 
 subcmd_dict = {}
 subcmd_dict['list'] = 'ListSubCommand'
 subcmd_dict['add'] = 'AddSubCommand'
 subcmd_dict['rm'] = 'RmSubCommand'
 subcmd_dict['update'] = 'UpdateSubCommand'
+subcmd_dict['clean'] = 'CleanSubCommand'
 subcmd_dict['help'] = 'HelpSubCommand'
 
 class HelpSubCommand(SubCommand):
@@ -41,6 +43,7 @@ class HelpSubCommand(SubCommand):
         dprint("obj name: ", help_subcmd_obj_name)
         help_subcmd_obj = eval(help_subcmd_obj_name + '(self.db)')
         help_subcmd_obj.print_help()
+        return 0
 
 def handle_subcmd(db, parser, subcmd, subcmd_args):
     # TODO: throw custom exception of 'subcmd' not in list

@@ -7,7 +7,7 @@ OSC Repository Class
 import os
 import abc
 
-from update_manager.Util import dprint
+from update_manager.Util import dprint, run_cmd_in_dir
 from update_manager.Repo import Repo
 
 class OscRepo(Repo):
@@ -21,11 +21,15 @@ class OscRepo(Repo):
         dprint("Looking for '.osc' subdirectory under '%s' ..." % repo_dir)
         return os.path.isdir('%s/.osc' % repo_dir)
         
-    def update(self, stop_on_error=True):
-        dprint("osc update (s=%s)" % stop_on_error)
-        dprint("NYI: Should run 'osc update' in our directory ...")
-        return True
+    def update(self, opts):
+        dprint("'osc' 'update' (opts=%s)" % opts)
+        if opts.verbose:
+            osc_cmd = ['osc', '-v', 'update']
+        else:
+            osc_cmd = ['osc', 'update']
+        res = run_cmd_in_dir(self.repo_dir, osc_cmd)
+        return res
 
     def clean(self, cleaning_level=1):
         dprint("osc clean (c=%s) is a NOOP" % cleaning_level)
-        return True
+        return 0

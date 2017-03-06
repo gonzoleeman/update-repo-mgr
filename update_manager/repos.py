@@ -39,3 +39,9 @@ def update_repo(repo_dir, repo_type, opts):
     repo_obj_name = __repo_dict[repo_type]
     repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
     return repo_obj.update(opts)
+
+def clean_repo(repo_dir, repo_type, opts):
+    dprint("update_repo called (%s, %s)..." % (repo_dir, repo_type))
+    repo_obj_name = __repo_dict[repo_type]
+    repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
+    return repo_obj.clean(opts)

@@ -26,7 +26,14 @@ def print_info(*args):
         print()
         print('***')
 
-def run_cmd_in_dir(dir_path, cmd_arr, stop_on_error=False):
+def print_multiline_info(lines):
+    if not opts.quiet:
+        print('***')
+        for l in lines:
+            print('*** ' + l)
+        print('***')
+
+def run_cmd_in_dir(dir_path, cmd_arr):
     """'cd' to dir_path, then run supplied command, waiting for result"""
     dprint("Running (dir=%s) cmd: %s" % (dir_path, ' '.join(cmd_arr)))
     pid = os.fork()
@@ -44,8 +51,6 @@ def run_cmd_in_dir(dir_path, cmd_arr, stop_on_error=False):
     wpid, wstat = os.waitpid(pid, 0)
     if wstat != 0:
         dprint("error: ret_stat=", wstat)
-        vprint('warning: "%s" in %s failed' % (' '.join(cmd_arr), dir_path))
-        if stop_on_error:
-            sys.exit(1)
+        print_info('warning: "%s" in %s failed' % (' '.join(cmd_arr), dir_path))
     return wstat
 

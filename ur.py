@@ -26,9 +26,10 @@ def parse_args():
     
     parser = OptionParser(version='%prog ' + __version__,
                           usage=\
-                           'Usage: %prog [options] SUBCOMMAND [SUBCMD_OPTS]\n' + \
+                           'Usage: %prog [options] SUBCOMMAND [subcmd_opts]\n' + \
                            '\n' + \
-                           'Use "%prog help subcommands" for a list of subcommands')
+                           'Use "%prog help subcommands" for a list of subcommands',
+                          description='For managing repository update and cleaning.')
     parser.disable_interspersed_args()
     parser.add_option('-d', '--debug', action='store_true', default=False,
                       help='enter debug mode [False]')

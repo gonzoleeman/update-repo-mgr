@@ -26,7 +26,7 @@ class Repo(abc.ABC):
         """class method: Is the supplied directory 'mine'?"""
 
     @abc.abstractmethod
-    def update(self, stop_on_error=True):
+    def update(self, opts):
         """Update this repo"""
 
     @abc.abstractmethod

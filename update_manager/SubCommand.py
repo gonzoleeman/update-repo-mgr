@@ -21,6 +21,7 @@ class SubCommand(abc.ABC):
         self.__short_help = short_help
         self.__long_help = long_help
         self.setup_parser()
+        self.parser.set_description(long_help)
 
     def setup_parser(self):
         """Set up a parser ready to go"""
