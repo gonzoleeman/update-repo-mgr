@@ -22,17 +22,16 @@ def find_owner(repo_dir):
     Find out which revision control system 'owns' this directory by
     calling each revision object until one of them clains it.
     """
-    repo_type = None
+    repo_match = None
     for repo_type in __repo_dict:
         repo_obj_name = __repo_dict[repo_type]
         dprint("Looking at repo list entry: [%s,%s]" %
                (repo_obj_name, repo_type))
         if eval(repo_obj_name).is_mine(repo_dir):
             dprint("Found a match for repo_dir=", repo_dir)
-            repo_type = repo_type
+            repo_match = repo_type
             break
-    return repo_type
-
+    return repo_match
 
 def update_repo(repo_dir, repo_type, opts):
     dprint("update_repo called (%s, %s)..." % (repo_dir, repo_type))

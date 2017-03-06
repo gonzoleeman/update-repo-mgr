@@ -19,7 +19,9 @@ class OscRepo(Repo):
     @classmethod
     def is_mine(cls, repo_dir):
         dprint("Looking for '.osc' subdirectory under '%s' ..." % repo_dir)
-        return os.path.isdir('%s/.osc' % repo_dir)
+        res = os.path.isdir('%s/.osc' % repo_dir)
+        dprint("This is an OSC directory:", res)
+        return res
         
     def update(self, opts):
         dprint("'osc' 'update' (opts=%s)" % opts)

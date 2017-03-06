@@ -20,7 +20,9 @@ class SvnRepo(Repo):
     @classmethod
     def is_mine(cls, repo_dir):
         dprint("Looking for '.svn' subdirectory under '%s' ..." % repo_dir)
-        return os.path.isdir('%s/.svn' % repo_dir)
+        res = os.path.isdir('%s/.svn' % repo_dir)
+        dprint("This is an SVN directory:", res)
+        return res
 
     def update(self, stop_on_error=True):
         dprint("svn update (s=%s)" % stop_on_error)

@@ -1,8 +1,5 @@
 # List of things to do:
 
-* Modify the "add" subcommand to add the current directory if no
-  directory name given. Ditto for "rm"
-
 * Add option to add directories to the database from a file (or
   stdin?), to make starting up with lots of pre-existing repos
 
@@ -21,3 +18,9 @@
   to the DB (i.e. something cleaner than a python stack trace)
 
 * Package this up so it can be installed, then install it
+
+* Add option to the `update` subcommand to be able to pass in a single
+  directory and have just it updated. Could this be useful for more
+  than one? (Not sure how)
+
+* Handle interrupt (e.g. control-c) more cleanly (and other signals?)

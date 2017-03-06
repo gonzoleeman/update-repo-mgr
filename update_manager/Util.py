@@ -5,6 +5,8 @@ Utility routines for update repository
 
 import os
 import sys
+import subprocess
+
 from update_manager import opts
 
 
@@ -34,23 +36,38 @@ def print_multiline_info(lines):
         print('***')
 
 def run_cmd_in_dir(dir_path, cmd_arr):
-    """'cd' to dir_path, then run supplied command, waiting for result"""
-    dprint("Running (dir=%s) cmd: %s" % (dir_path, ' '.join(cmd_arr)))
-    pid = os.fork()
-    if pid < 0:
-        print("Error: cannot fork!\n", file=sys.stderr)
-        sys.exit(1)
-    if pid == 0:
-        # the child
-        dprint("Child changing to directory: %s" % dir_path)
-        os.chdir(dir_path)
-        dprint("Child running cmd: %s, args:" % cmd_arr[0], cmd_arr)
-        os.execvp(cmd_arr[0], cmd_arr)
-        # not reached
-    # the parent
-    wpid, wstat = os.waitpid(pid, 0)
+    """
+    'cd' to dir_path, then run supplied command, waiting for result
+    """
+    dprint("Running (dir=%s) cmd: \"%s\"" % (dir_path, ' '.join(cmd_arr)))
+    p = subprocess.Popen(cmd_arr, cwd=dir_path)
+    p.communicate()
+    wstat = p.returncode
     if wstat != 0:
         dprint("error: ret_stat=", wstat)
         print_info('warning: "%s" in %s failed' % (' '.join(cmd_arr), dir_path))
     return wstat
+
+def run_cmd_in_dir_ret_output(dir_path, cmd_arr):
+    """
+    'cd' to dir_path, then run supplied command, waiting for result
+
+    Also, the output will not be displayed but instead will be
+    returned to the caller together with the exit status
+    """
+    dprint("Running [save output] (dir=%s) cmd: \"%s\"" %
+           (dir_path, ' '.join(cmd_arr)))
+    p = subprocess.Popen(cmd_arr, cwd=dir_path, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    (std_output, err_output) = p.communicate()
+    if std_output:
+        dprint("std_output:", std_output)
+    if err_output:
+        dprint("err_output:", err_output)
+    wstat = p.returncode
+    dprint("wstat=", wstat)
+    if wstat != 0:
+        dprint("error: ret_stat=", wstat)
+        print_info('warning: "%s" in %s failed' % (' '.join(cmd_arr), dir_path))
+    return (wstat, std_output)
 
