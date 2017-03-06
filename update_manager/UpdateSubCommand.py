@@ -62,9 +62,9 @@ class UpdateSubCommand(SubCommand):
         # print summary report?
         if not opts.quiet:
             report_arr = [
-                'Summary Report',
+                '"Update" Summary Report',
                 '',
-                'Directories Scanned: %3d' % ttl,
+                'Directories Updated: %3d' % ttl,
                 'Successes:           %3d' % successes,
                 'Failures:            %3d' % failures]
 

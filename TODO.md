@@ -1,12 +1,12 @@
-List of things to do:
+# List of things to do:
 
-- Modify the "add" subcommand to add the current directory if no
-  directory name given
+* Modify the "add" subcommand to add the current directory if no
+  directory name given. Ditto for "rm"
 
-- Add option to add directories to the database from a file (or
-  stdin?)
+* Add option to add directories to the database from a file (or
+  stdin?), to make starting up with lots of pre-existing repos
 
-- Still need to plumb the "continue" functionality, but first must
+* Still need to plumb the "continue" functionality, but first must
   decide the functionality desired. Do we want to "grey list" some
   directories, e.g. if they aren't updating right now but we want to
   leave them in the database? How about having an "enable" bit for
@@ -15,11 +15,9 @@ List of things to do:
   caller if they want to skip, ignore, or continue when an update
   doesn't work (again, like zypper)?
 
-- Set up LICENSE, etc, for this to be a proper project
+* Put project on github
 
-- Put this on github
-
-- Handle the case where a directory has gone away since it was added
+* Handle the case where a directory has gone away since it was added
   to the DB (i.e. something cleaner than a python stack trace)
 
-
+* Package this up so it can be installed, then install it
