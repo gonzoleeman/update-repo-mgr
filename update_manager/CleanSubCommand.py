@@ -7,7 +7,7 @@ import sys
 from optparse import OptionParser
 
 from update_manager import opts
-from update_manager.Util import dprint, print_info
+from update_manager.Util import dprint, print_info, print_multiline_info
 from update_manager.repos import update_repo, clean_repo
 from update_manager.SubCommand import SubCommand
 
