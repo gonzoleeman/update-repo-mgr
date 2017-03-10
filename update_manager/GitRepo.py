@@ -74,7 +74,7 @@ class GitRepo(Repo):
         if global_opts.quiet:
             git_cmd.append('--quiet')
         if opts.level > 1:
-            git_cmd.append('--agressive')
+            git_cmd.append('--aggressive')
         res = run_cmd_in_dir(self.repo_dir, git_cmd)
         if res:
             if opts.stop_on_error:
