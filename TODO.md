@@ -18,3 +18,6 @@
 
 * Enhancement: add time statistics in report output, e.g. total time,
   average time per repository (perhaps by type?)
+
+* Track actions that are skipped, like "clean" for non-git repos,
+  and show "repos skipped" during the report
