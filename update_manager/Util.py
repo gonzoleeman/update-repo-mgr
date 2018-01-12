@@ -3,6 +3,8 @@
 Utility routines for update repository
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import subprocess
@@ -15,6 +17,22 @@ def dprint(*args):
     """Debug printing"""
     if opts.debug and args:
         print("DEBUG: ", file=sys.stderr, end='')
+        for arg in args:
+            print(arg, file=sys.stderr, end='')
+        print('', file=sys.stderr)
+
+def eprint(*args):
+    """Error printing"""
+    if args:
+        print("Error: ", file=sys.stderr, end='')
+        for arg in args:
+            print(arg, file=sys.stderr, end='')
+        print('', file=sys.stderr)
+
+def wprint(*args):
+    """Warning printing"""
+    if args:
+        print("Warning: ", file=sys.stderr, end='')
         for arg in args:
             print(arg, file=sys.stderr, end='')
         print('', file=sys.stderr)
