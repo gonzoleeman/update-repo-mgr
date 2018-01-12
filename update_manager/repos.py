@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 The repository top-level interface. This should be the only place that
 knows about individual repo types and abstracts it for others.

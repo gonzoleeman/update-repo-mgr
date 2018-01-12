@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 """
 Update Repository -- A Tool to make updating a long list of
 repositories easier. For Hack Week 2017!
