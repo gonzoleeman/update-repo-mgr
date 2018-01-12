@@ -3,11 +3,13 @@
 Database class for update manager
 """
 
+from __future__ import print_function
+
 import os
 import sys
 
 from update_manager import opts, DEFAULT_DB_DIR, DB_FILE
-from update_manager.Util import dprint, print_info
+from update_manager.Util import dprint, print_info, eprint
 
 DB_HEADER = '#\n# Database file -- do not edit\n#\n'
 DB_HEADER_LEN = len(DB_HEADER)
@@ -34,7 +36,7 @@ class Database:
             try:
                 os.mkdir(self.ur_dir)
             except (PermissionError, FileNotFoundError) as err:
-                print("error: mkdir failed:", err, file=sys.stderr)
+                eprint("mkdir failed:", err)
                 sys.exit(1)
 
     def read_and_validate_db_file(self):
@@ -44,15 +46,14 @@ class Database:
         with open(self.__db_file, 'r') as dbf:
             hdr = dbf.read(DB_HEADER_LEN)
             if hdr != DB_HEADER:
-                print("error: database file corrupted: %s" % self.__db_file,
-                      file=sys.stderr)
+                eprint("database file corrupted: %s" % self.__db_file)
                 sys.exit(1)
             for e in dbf:
                 dprint("Adding line: '%s'" % e.rstrip())
                 i = e.split()
                 if len(i) != 2:
-                    print("error: database file correctuped: %s" %
-                          self.__db_file, file=sys.stderr)
+                    eprint("database file correctuped: %s" %
+                           self.__db_file)
                     print("line: /%s/" % e, file=sys.stderr)
                     sys.exit(1)
                 self.__db_dict[i[1]] = i[0]

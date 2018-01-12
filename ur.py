@@ -6,6 +6,8 @@ repositories easier. For Hack Week 2017!
 Will handle multiiple repository types.
 """
 
+from __future__ import print_function
+
 import sys
 import os
 from optparse import OptionParser

@@ -7,7 +7,8 @@ import sys
 from optparse import OptionParser
 
 from update_manager import opts
-from update_manager.Util import dprint, print_info, print_multiline_info
+from update_manager.Util import dprint, wprint, print_info
+from update_manager.Util import print_multiline_info
 from update_manager.repos import update_repo, clean_repo
 from update_manager.SubCommand import SubCommand
 
@@ -40,8 +41,7 @@ class CleanSubCommand(SubCommand):
 
         # check for interrupted update in progress
         if options.continue_after_error:
-            print("Warning: 'continue' not yet supported -- ignoring",
-                  file=sys.stderr)
+            wprint("'continue' not yet supported -- ignoring")
 
         # if update-in-progress and not continuing then error exit
         ttl, successes, failures, failure_list = 0, 0, 0, []

@@ -3,6 +3,8 @@
 Subcommand interface
 """
 
+from __future__ import print_function
+
 import sys
 
 from update_manager.Util import dprint

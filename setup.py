@@ -3,6 +3,8 @@
 Setup file for installation of the update repo command
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import shutil

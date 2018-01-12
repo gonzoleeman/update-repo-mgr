@@ -7,7 +7,7 @@ import sys
 import os
 from optparse import OptionParser
 
-from update_manager.Util import dprint, print_info
+from update_manager.Util import dprint, print_info, eprint
 from update_manager.repos import find_owner
 from update_manager.SubCommand import SubCommand
 
@@ -41,15 +41,14 @@ class AddSubCommand(SubCommand):
         # if update-in-progress print error message and exit
 
         if self.db.entry_present(repo_path):
-            print("error: path already present: %s" % repo_path,
-                  file=sys.stderr)
+            eprint("path already present: %s" % repo_path)
             sys.exit(1)
 
         repo_type = find_owner(repo_path)
 
         if repo_type is None:
-            print("error: Unknown or unsupported repo type: %s" %
-                  repo_path, file=sys.stderr)
+            eprint("error: Unknown or unsupported repo type: %s" %
+                   repo_path)
             sys.exit(1)
 
         # now finally add it to the list

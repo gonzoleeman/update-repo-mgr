@@ -7,7 +7,7 @@ import sys
 import os
 from optparse import OptionParser
 
-from update_manager.Util import dprint, print_info
+from update_manager.Util import dprint, print_info, eprint
 from update_manager.SubCommand import SubCommand
 
 
@@ -39,8 +39,7 @@ class RmSubCommand(SubCommand):
         # we do not care if the repo_path exists, since we are removing it
 
         if not self.db.entry_present(repo_path):
-            print("error: not such entry present: %s" % repo_path,
-                  file=sys.stderr)
+            eprint("not such entry present: %s" % repo_path)
             sys.exit(1)
 
         # now finally add it to the list

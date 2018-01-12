@@ -6,7 +6,7 @@ knows about individual repo types and abstracts it for others.
 
 import sys
 
-from update_manager.Util import dprint
+from update_manager.Util import dprint, eprint
 from update_manager.GitRepo import GitRepo
 from update_manager.SvnRepo import SvnRepo
 from update_manager.OscRepo import OscRepo
@@ -42,8 +42,8 @@ def update_repo(repo_dir, repo_type, opts):
         repo_obj = eval(repo_obj_name + '("' + repo_dir + '")')
         res = repo_obj.update(opts)
     except FileNotFoundError:
-        print("error: directy gone: %s" % repo_dir, file=sys.stderr)
-        print("Consider using the 'rm' subcommand to remove it")
+        eprint("directy gone: %s. " % repo_dir +
+               "Consider using the 'rm' subcommand to remove it")
         return 1
     dprint("update_repo: returning:", res)
     return res
