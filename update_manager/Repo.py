@@ -4,12 +4,13 @@ Repository Class
 
 
 import os
-import abc
+import abc, six
 
 from update_manager.Util import dprint
 
 
-class Repo(abc.ABC):
+@six.add_metaclass(abc.ABCMeta)
+class Repo():
     """
     Repository abstract base class.
 

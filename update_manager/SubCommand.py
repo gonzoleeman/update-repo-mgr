@@ -3,12 +3,13 @@ Subcommand class
 """
 
 import os
-import abc
+import abc, six
 from optparse import OptionParser
 
 from update_manager.Util import dprint
 
-class SubCommand(abc.ABC):
+@six.add_metaclass(abc.ABCMeta)
+class SubCommand():
     """
     Subcommand abstract base class
     """
