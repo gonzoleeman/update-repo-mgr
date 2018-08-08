@@ -21,3 +21,6 @@
 
 * Track actions that are skipped, like "clean" for non-git repos,
   and show "repos skipped" during the report
+
+* Bug: "ur list" on very first use fails with stack dump. Next run
+  succeeds.
