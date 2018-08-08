@@ -36,7 +36,7 @@ class GitRepo(Repo):
 
     def update(self, opts):
         dprint("'git' 'update' (opts=%s)" % opts)
-        git_cmd = ['git', 'pull']
+        git_cmd = ['git', 'pull', '--all']
         if opts.verbose:
             git_cmd.append('-v')
         res = run_cmd_in_dir(self.repo_dir, git_cmd)
