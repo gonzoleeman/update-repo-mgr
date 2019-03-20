@@ -40,7 +40,6 @@ class GitRepo(Repo):
         if opts.verbose:
             git_cmd.append('-v')
         git_cmd.append('--prune')
-        git_cmd.append('--all')
         res = run_cmd_in_dir(self.repo_dir, git_cmd)
         dprint("'update' for git returning:", res)
         return res
