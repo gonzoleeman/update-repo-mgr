@@ -14,3 +14,10 @@ program's database using the `ur add DIRECTORY` command. You then use
 The Author and currently only maintainer:
     Lee Duncan
     lduncan@suse.com
+
+## Build
+
+To build, you must now run, as root (until fixed):
+
+    pip install --break-system-packages .
+
