@@ -6,10 +6,14 @@ Git Repository Class
 import os
 import abc
 
-from update_manager import opts as global_opts
-from update_manager.Util import dprint
-from update_manager.Util import run_cmd_in_dir, run_cmd_in_dir_ret_output
-from update_manager.Repo import Repo
+from .Util import (
+    run_cmd_in_dir,
+    run_cmd_in_dir_ret_output,
+    dprint,
+    )
+from .Repo import Repo
+from .Opts import OPTS
+
 
 class GitRepo(Repo):
 
@@ -72,7 +76,7 @@ class GitRepo(Repo):
                     ret_res = res
 
         git_cmd = ['git', 'gc']
-        if global_opts.quiet:
+        if OPTS.quiet:
             git_cmd.append('--quiet')
         if opts.level > 1:
             git_cmd.append('--aggressive')

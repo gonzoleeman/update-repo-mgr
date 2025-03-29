@@ -6,9 +6,9 @@ import sys
 import os
 from optparse import OptionParser
 
-from update_manager.Util import dprint, print_info, eprint
-from update_manager.repos import find_owner
-from update_manager.SubCommand import SubCommand
+from .Util import dprint, print_info, eprint
+from .repos import find_owner
+from .SubCommand import SubCommand
 
 
 class AddSubCommand(SubCommand):

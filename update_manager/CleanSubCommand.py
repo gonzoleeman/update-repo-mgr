@@ -5,11 +5,15 @@ The 'clean' subcommand
 import sys
 from optparse import OptionParser
 
-from update_manager import opts
-from update_manager.Util import dprint, wprint, print_info
-from update_manager.Util import print_multiline_info
-from update_manager.repos import update_repo, clean_repo
-from update_manager.SubCommand import SubCommand
+from .Util import (
+    dprint,
+    wprint,
+    print_multiline_info,
+    print_info,
+    )
+from .repos import update_repo, clean_repo
+from .SubCommand import SubCommand
+from .Opts import OPTS
 
 
 class CleanSubCommand(SubCommand):
@@ -63,7 +67,7 @@ class CleanSubCommand(SubCommand):
         # remove progress tracking ...
 
         # print summary report?
-        if not opts.quiet:
+        if not OPTS.quiet:
             report_arr = [
                 '"Clean" Summary Report',
                 '',

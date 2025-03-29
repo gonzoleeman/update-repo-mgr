@@ -6,8 +6,9 @@ OSC Repository Class
 import os
 import abc
 
-from update_manager.Util import dprint, run_cmd_in_dir
-from update_manager.Repo import Repo
+from .Util import dprint, run_cmd_in_dir
+from .Repo import Repo
+
 
 class OscRepo(Repo):
 

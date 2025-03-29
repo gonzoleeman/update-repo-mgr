@@ -3,13 +3,13 @@ Subcommand class
 """
 
 import os
-import abc, six
+from abc import ABC, abstractmethod
 from optparse import OptionParser
 
-from update_manager.Util import dprint
+from .Util import dprint
 
-@six.add_metaclass(abc.ABCMeta)
-class SubCommand():
+
+class SubCommand(ABC):
     """
     Subcommand abstract base class
     """
@@ -28,7 +28,7 @@ class SubCommand():
         self.__parser = OptionParser(
             usage='Usage: %%prog [program_options] %s' % self.__short_help)
 
-    @abc.abstractmethod
+    @abstractmethod
     def handle_command(self, db, cmd_args):
         """Handle the command"""
 

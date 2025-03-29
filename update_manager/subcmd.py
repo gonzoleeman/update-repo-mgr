@@ -2,26 +2,26 @@
 Subcommand interface
 """
 
-from __future__ import print_function
-
 import sys
 
-from update_manager.Util import dprint
+from .Util import dprint
+from .SubCommand import SubCommand
+from .ListSubCommand import ListSubCommand
+from .AddSubCommand import AddSubCommand
+from .RmSubCommand import RmSubCommand
+from .UpdateSubCommand import UpdateSubCommand
+from .CleanSubCommand import CleanSubCommand
 
-from update_manager.SubCommand import SubCommand
-from update_manager.ListSubCommand import ListSubCommand
-from update_manager.AddSubCommand import AddSubCommand
-from update_manager.RmSubCommand import RmSubCommand
-from update_manager.UpdateSubCommand import UpdateSubCommand
-from update_manager.CleanSubCommand import CleanSubCommand
 
-subcmd_dict = {}
-subcmd_dict['list'] = 'ListSubCommand'
-subcmd_dict['add'] = 'AddSubCommand'
-subcmd_dict['rm'] = 'RmSubCommand'
-subcmd_dict['update'] = 'UpdateSubCommand'
-subcmd_dict['clean'] = 'CleanSubCommand'
-subcmd_dict['help'] = 'HelpSubCommand'
+SUBCMD_DICT = {
+    'list' : 'ListSubCommand',
+    'add' : 'AddSubCommand',
+    'rm' : 'RmSubCommand',
+    'update' : 'UpdateSubCommand',
+    'clean' : 'CleanSubCommand',
+    'help' : 'HelpSubCommand',
+    }
+
 
 class HelpSubCommand(SubCommand):
     def __init__(self, db):
@@ -40,7 +40,7 @@ class HelpSubCommand(SubCommand):
         help_subcmd = cmd_args[0]
         dprint("Help subcommand: ", help_subcmd)
         # handle subcommand-specific help
-        help_subcmd_obj_name = subcmd_dict[help_subcmd]
+        help_subcmd_obj_name = SUBCMD_DICT[help_subcmd]
         dprint("obj name: ", help_subcmd_obj_name)
         help_subcmd_obj = eval(help_subcmd_obj_name + '(self.db)')
         help_subcmd_obj.print_help()
@@ -60,20 +60,20 @@ def handle_subcmd(db, parser, subcmd, subcmd_args):
         elif not subcmd_in_list(subcmd_args[0]):
             parser.error("Unknown subcommand help requested")
             sys.exit(1)
-    subcmd_obj_name = subcmd_dict[subcmd]
+    subcmd_obj_name = SUBCMD_DICT[subcmd]
     subcmd_obj = eval(subcmd_obj_name + '(db)')
     return subcmd_obj.handle_command(subcmd_args)
 
 def subcmd_in_list(subcmd):
-    return subcmd in subcmd_dict
+    return subcmd in SUBCMD_DICT
 
 def print_subcmd_list(db):
     print("Subcommand list:")
-    for subcmd in subcmd_dict:
+    for subcmd in SUBCMD_DICT:
         if subcmd == 'help':
             help_msg = 'Print help information.'
         else:
-            subcmd_obj_name = subcmd_dict[subcmd]
+            subcmd_obj_name = SUBCMD_DICT[subcmd]
             subcmd_obj = eval(subcmd_obj_name + '(db)')
             help_msg = subcmd_obj.long_help
         print("\t%s\t%s" % (subcmd, help_msg))

@@ -14,3 +14,11 @@ program's database using the `ur add DIRECTORY` command. You then use
 The Author and currently only maintainer:
     Lee Duncan
     lduncan@suse.com
+
+## Installation
+
+You can let python3's pip module do the work:
+
+    sh> python3 -mpip install --prefix /usr/local --verbose .
+
+Note that you will have to be root to install to prefix "/usr".

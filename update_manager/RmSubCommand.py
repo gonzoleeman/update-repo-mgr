@@ -6,8 +6,8 @@ import sys
 import os
 from optparse import OptionParser
 
-from update_manager.Util import dprint, print_info, eprint
-from update_manager.SubCommand import SubCommand
+from .Util import dprint, print_info, eprint
+from .SubCommand import SubCommand
 
 
 class RmSubCommand(SubCommand):

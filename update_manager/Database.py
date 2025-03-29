@@ -2,14 +2,12 @@
 Database class for update manager
 """
 
-from __future__ import print_function
-
 import os
 import sys
 
-from update_manager import opts, DEFAULT_DB_DIR, DB_FILE
-from update_manager.Util import dprint, print_info, eprint
+from .Util import dprint, eprint, print_info
 
+DB_FILE = 'REPO_LIST'
 DB_HEADER = '#\n# Database file -- do not edit\n#\n'
 DB_HEADER_LEN = len(DB_HEADER)
 

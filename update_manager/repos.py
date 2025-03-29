@@ -5,10 +5,10 @@ knows about individual repo types and abstracts it for others.
 
 import sys
 
-from update_manager.Util import dprint, eprint
-from update_manager.GitRepo import GitRepo
-from update_manager.SvnRepo import SvnRepo
-from update_manager.OscRepo import OscRepo
+from .Util import dprint, eprint
+from .GitRepo import GitRepo
+from .SvnRepo import SvnRepo
+from .OscRepo import OscRepo
 
 
 # list each repository type we handle, and what object implements it

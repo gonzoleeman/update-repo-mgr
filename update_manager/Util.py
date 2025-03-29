@@ -2,19 +2,16 @@
 Utility routines for update repository
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import subprocess
 
-from update_manager import opts
-
+from .Opts import OPTS
 
 
 def dprint(*args):
     """Debug printing"""
-    if opts.debug and args:
+    if OPTS.debug and args:
         print("DEBUG: ", file=sys.stderr, end='')
         for arg in args:
             print(arg, file=sys.stderr, end='')
@@ -37,7 +34,7 @@ def wprint(*args):
         print('', file=sys.stderr)
 
 def print_info(*args):
-    if not opts.quiet:
+    if not OPTS.quiet:
         print('***')
         print('*** ', end='')
         for arg in args:
@@ -46,7 +43,7 @@ def print_info(*args):
         print('***')
 
 def print_multiline_info(lines):
-    if not opts.quiet:
+    if not OPTS.quiet:
         print('***')
         for l in lines:
             print('*** ' + l)

@@ -4,13 +4,12 @@ Repository Class
 
 
 import os
-import abc, six
+from abc import ABC, abstractmethod
 
-from update_manager.Util import dprint
+from .Util import dprint
 
 
-@six.add_metaclass(abc.ABCMeta)
-class Repo():
+class Repo(ABC):
     """
     Repository abstract base class.
 
@@ -21,15 +20,15 @@ class Repo():
         dprint("'Repo' super-class init routine ..., dir=%s" % repo_dir)
         self.__repo_dir = repo_dir
 
-    @abc.abstractmethod
+    @abstractmethod
     def is_mine(cls, repo_dir):
         """class method: Is the supplied directory 'mine'?"""
 
-    @abc.abstractmethod
+    @abstractmethod
     def update(self, opts):
         """Update this repo"""
 
-    @abc.abstractmethod
+    @abstractmethod
     def clean(self, cleaning_level=1):
         """clean this repo"""
 

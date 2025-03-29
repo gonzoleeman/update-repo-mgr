@@ -1,0 +1,38 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling", "hatch-vcs"]
+
+[project]
+name = "ur"
+description = "Script for updating and managing repositories"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+authors = [
+    {email = "leeman.duncan@gmail.com", name = "Lee Duncan"}
+]
+maintainers = [{email = "leeman.duncan@gmail.com", name = "Lee Duncan"}]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX :: Linux",
+]
+dynamic = ["version"]
+
+[project.license-files]
+paths = ["COPYING"]
+
+[project.urls]
+Homepage = "http://github.com/gonzoleeman/update-repo-mgr"
+
+[project.scripts]
+ur = "update_manager.ur:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["update_manager"]
+

@@ -4,8 +4,8 @@ The 'list' subcommand
 
 from optparse import OptionParser
 
-from update_manager.Util import dprint
-from update_manager.SubCommand import SubCommand
+from .Util import dprint
+from .SubCommand import SubCommand
 
 
 class ListSubCommand(SubCommand):

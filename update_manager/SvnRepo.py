@@ -6,9 +6,10 @@ svn (subversion) Repository Class
 import os
 import abc
 
-from update_manager import opts as global_opts
-from update_manager.Util import dprint, run_cmd_in_dir
-from update_manager.Repo import Repo
+from .Repo import Repo
+from .Util import dprint
+from .Opts import OPTS
+
 
 class SvnRepo(Repo):
 
@@ -26,7 +27,7 @@ class SvnRepo(Repo):
     def update(self, stop_on_error=True):
         dprint("svn update (s=%s)" % stop_on_error)
         svn_cmd = ['svn', 'update']
-        if global_opts.quiet:
+        if OPTS.quiet:
             svn_cmd.append('-q')
         res = run_cmd_in_dir(self.repo_dir, svn_cmd)
         return res
