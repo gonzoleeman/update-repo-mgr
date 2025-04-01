@@ -13,7 +13,6 @@ class AddSubCommand(SubCommand):
     """
     Add one or more repositories to the database
     """
-
     def __init__(self, database, parser, args):
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"add" subcommand init routine, args={args}')

@@ -16,7 +16,7 @@ from .database import Database
 from .util import dprint
 
 
-def reformat_subcmd_help(msg):
+def reformat_subcmd_help(msg : str) -> str:
     """
     Reformat subcommand help message, of the form:
 
@@ -29,17 +29,16 @@ def reformat_subcmd_help(msg):
     """
     lines = msg.splitlines()
     return_lines = []
-
     for line in lines:
         if line.startswith('usage: '):
             line = 'sh> ' + line[len('usage: '):]
         line = 4 * ' ' + line
         return_lines += [line]
     return_lines += ['', '']
-
     return '\n'.join(return_lines)
 
-def define_parser():
+
+def define_parser() :
     """set up parser with subparsers"""
     parent_parser = ArgumentParser(
         description='For managing repository update and cleaning.',
@@ -97,7 +96,7 @@ def define_parser():
     return parent_parser
 
 
-def parse_args() -> Namespace:
+def parse_args():
     """Parse command-line arguments"""
     parser = define_parser()
     args = parser.parse_args()
@@ -108,7 +107,7 @@ def parse_args() -> Namespace:
     dprint(f'args: {args}')
     return (parser, args)
 
-def main():
+def main() -> int:
     """Main entry point"""
     (parser, args) = parse_args()
 

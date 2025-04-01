@@ -1,19 +1,12 @@
 Items todo:
 
-* update install systemm (kill setup.py)
+* add in static type checking (mypy) and pylint
+  - how to do this automatically?
 
-* add in static type checking (and pylint)
-
-* add in ability to scan for repo directorys
+* add in ability to scan for repo directories
 
 * add in ability to continue from where last (failed) scan stopped
   - note that a scan only stops if the "stop on error" option is set
-
-* add in ability to pass in one or more directories to scan
-
-* use pyproject automatic front-end generation for the "ur" entry point?
-
-* add option to pass in UR database directory
 
 * fix bug where default directory is hard-coded, even though there
   is a default value
@@ -32,4 +25,5 @@ Items todo:
 * make subcommand gathering/usage automatic, i.e. any method in some
   sub-directory, or matching a name pattern?
 
-* add selt-tests!
+* add selt-tests! -- pyunit is ok for unit testing, but we also
+  need command-level testing
