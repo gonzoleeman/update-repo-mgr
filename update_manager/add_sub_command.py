@@ -1,30 +1,26 @@
-"""
-The 'add' subcommand
-"""
+"""The 'add' subcommand."""
 
 import os
 
-from .util import dprint, print_info, eprint
 from .repos import find_owner
 from .sub_command import SubCommand
+from .util import dprint, eprint, print_info
 
 
 class AddSubCommand(SubCommand):
-    """
-    Add one or more repositories to the database
-    """
-    def __init__(self, database, parser, args):
+    """Add one or more repositories to the database."""
+
+    def __init__(self, database, parser, args) -> None:
+        """Initialize Add subcommand"""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"add" subcommand init routine, args={args}')
 
     def handle_command(self, short_help=None, long_help=None):
-        dprint(f'handling "add" subcommand (dirs={self.args.DIRECTORY})')
+        dprint(f'handle_command("add", "{short_help}", "{long_help}")')
 
         dir_list = self.args.DIRECTORY
-
+        dprint(f'directories to add: {dir_list}')
         result = 0
-
-        dprint(f'Looking at dir_list={dir_list}')
         for a_dir in dir_list:
             dprint(f'Looking at directory to add: {a_dir} ...')
 

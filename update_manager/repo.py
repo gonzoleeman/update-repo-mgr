@@ -20,6 +20,7 @@ class Repo(ABC):
         self.__repo_dir = repo_dir
 
     @classmethod
+    @abstractmethod
     def is_mine(cls, repo_dir):
         """class method: Is the supplied directory 'mine'?"""
 

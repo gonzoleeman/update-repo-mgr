@@ -4,6 +4,7 @@ Database class for update manager
 
 import os
 import sys
+from pathlib import Path
 
 from .util import dprint, eprint, print_info
 
@@ -11,11 +12,14 @@ DB_FILE = 'REPO_LIST'
 DB_HEADER = '#\n# Database file -- do not edit\n#\n'
 DB_HEADER_LEN = len(DB_HEADER)
 
+DB_FILE_COLUMNS = 2
+
 
 class Database:
     """
     This class represents the database for the update manager
     """
+
     def __init__(self):
         self.ur_dir = os.getenv('UR_DIR', os.path.expanduser('~/.ur_dir'))
         self.ensure_ur_dir()
@@ -41,7 +45,7 @@ class Database:
     def read_and_validate_db_file(self):
         """Read DB file and validate header is correct"""
         dprint(f'Reading DB file ({self.__db_file})')
-        with open(self.__db_file, 'r') as dbf:
+        with open(self.__db_file, encoding='utf_8') as dbf:
             hdr = dbf.read(DB_HEADER_LEN)
             if hdr != DB_HEADER:
                 eprint(f'database file corrupted: {self.__db_file}')
@@ -49,7 +53,7 @@ class Database:
             for entry in dbf:
                 dprint(f'Adding line: "{entry.rstrip()}"')
                 entry_split = entry.split()
-                if len(entry_split) != 2:
+                if len(entry_split) != DB_FILE_COLUMNS:
                     eprint(f'database file correctuped: {self.__db_file}')
                     print(f'line: /{entry}/', file=sys.stderr)
                     sys.exit(1)
@@ -60,8 +64,7 @@ class Database:
         """Ensure the database isn't corrupt"""
         if not os.path.isfile(self.__db_file):
             dprint('Initializing DB file with header ...')
-            with open(self.__db_file, 'w') as dbf:
-                dbf.write(DB_HEADER)
+            Path(self.__db_file).write_text(DB_HEADER, encoding='utf_8')
         else:
             self.read_and_validate_db_file()
 
@@ -95,7 +98,7 @@ class Database:
     def write_out_db_file(self):
         """Write out the DB file, so our cache is flushed"""
         dprint('Writing out DB file ...')
-        with open(self.__db_file, 'w') as dbf:
+        with open(self.__db_file, 'w', encoding='utf_8') as dbf:
             dbf.write(DB_HEADER)
             for k in sorted(self.__db_dict.keys()):
                 a_value = self.__db_dict[k]

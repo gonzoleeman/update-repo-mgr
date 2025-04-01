@@ -13,7 +13,7 @@ class SubCommand(ABC):
     """
 
     def __init__(self, database, parser, args):
-        dprint(f'"Subcommand" super-class init routine')
+        dprint('"Subcommand" super-class init routine')
         self.__database = database
         self.__parser = parser
         self.__args = args
@@ -23,9 +23,9 @@ class SubCommand(ABC):
         """Handle the command"""
 
     @classmethod
+    @abstractmethod
     def add_options(cls, parser):
         """Add parser options for this command"""
-        print(f'DEBUG: class-level "add_options" called ({cls.__name__})!')
 
     @property
     def database(self):

@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Update Repository -- A Tool to make updating a long list of
 repositories easier. For Hack Week 2017!
@@ -6,7 +5,7 @@ repositories easier. For Hack Week 2017!
 Will handle multiiple repository types.
 """
 
-from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from update_manager import __version__ as ur_version
 
@@ -16,29 +15,30 @@ from .database import Database
 from .util import dprint
 
 
-def reformat_subcmd_help(msg : str) -> str:
+def reformat_subcmd_help(msg: str) -> str:
     """
     Reformat subcommand help message, of the form:
 
     > usage: ur SUBCMD ...
     > ... (more lines)
 
-    by: * removing "usage: " from the first line
+    by: * replacing "^usage: " with "> "
         * indenting all lines 4 spaces
         * adding a blank line at the end
     """
     lines = msg.splitlines()
     return_lines = []
     for line in lines:
-        if line.startswith('usage: '):
-            line = 'sh> ' + line[len('usage: '):]
-        line = 4 * ' ' + line
-        return_lines += [line]
+        line_copy = line
+        if line_copy.startswith('usage: '):
+            line_copy = 'sh> ' + line_copy[len('usage: '):]
+        line_copy = 4 * ' ' + line_copy
+        return_lines += [line_copy]
     return_lines += ['', '']
     return '\n'.join(return_lines)
 
 
-def define_parser() :
+def define_parser():
     """set up parser with subparsers"""
     parent_parser = ArgumentParser(
         description='For managing repository update and cleaning.',
@@ -76,20 +76,19 @@ def define_parser() :
             help=SUBCMD_DICT[subcmd_name].__doc__)
         # call class method to set up arguments for this class
         subcmd_class = SUBCMD_DICT[subcmd_name]
-        if subcmd_name == 'help':
-            subcmd_class.add_options(sub_parser, SUBCMD_DICT)
-        else:
-            subcmd_class.add_options(sub_parser)
+        subcmd_class.add_options(sub_parser)
 
         # set up subcommand usage
         subcmd_msg = sub_parser.format_help()
         subcmd_help += [reformat_subcmd_help(subcmd_msg)]
 
+        #
         # XXX: this is the shorter version ....
-        #subcmd_msg = sub_parser.format_usage().split()
-        #if subcmd_msg[0] == 'usage:':
-        #    subcmd_msg = subcmd_msg[1:]
-        #subcmd_help += [4 * ' ' + ' '.join(subcmd_msg)]
+        # subcmd_msg = sub_parser.format_usage().split()
+        # if subcmd_msg[0] == 'usage:':
+        #     subcmd_msg = subcmd_msg[1:]
+        # subcmd_help += [4 * ' ' + ' '.join(subcmd_msg)]
+        #
 
     parent_parser.epilog = ''.join(subcmd_help)
 
@@ -107,24 +106,19 @@ def parse_args():
     dprint(f'args: {args}')
     return (parser, args)
 
+
 def main() -> int:
     """Main entry point"""
     (parser, args) = parse_args()
-
-    # set up the database (if needed)
-    if args.subcommand == 'help':
-        database = None
-    else:
-        database = Database()
-
+    database = Database()
     try:
         res = handle_subcmd(database, parser, args)
     except KeyboardInterrupt:
         print('\nInterrupted')
         # XXX: clean up?
         return 1
-
     return res
+
 
 if __name__ == '__main__':
     main()

@@ -1,6 +1,4 @@
-"""
-The 'update' subcommand
-"""
+"""The 'update' subcommand"""
 
 import sys
 
@@ -12,7 +10,6 @@ from .util import (
     )
 from .repos import update_repo
 from .sub_command import SubCommand
-from .opts import OPTS
 
 
 class UpdateSubCommand(SubCommand):
@@ -21,34 +18,27 @@ class UpdateSubCommand(SubCommand):
     """
     def __init__(self, database, parser, args):
         SubCommand.__init__(self, database, parser, args)
-        dprint('"update" subcommand init routine, args={args}')
+        dprint(f'"update" subcommand init routine, args={args}')
 
     def handle_command(self, short_help=None, long_help=None):
-        dprint('handling "update" subcommand')
+        dprint(f'handle_command("update", "{short_help}", "{long_help}")')
 
-        # XXX
-        # check for "continue on error" ???
-
-        # XXX
-        # check for interrupted update in progress
-        # if update-in-progress and not continuing then error exit
-
-        dprint(f'update: directories: {self.args.DIRECTORY}')
-        directory_list = self.args.DIRECTORY
-        if directory_list:
-            # validate directories
-            for a_dir in directory_list:
-                if not a_dir in self.database.db_dict:
+        dir_list = self.args.DIRECTORY
+        dprint(f'update: directories: {dir_list}')
+        if dir_list:
+            # ensure dir list passed in contains valid directories in the DB
+            for a_dir in dir_list:
+                if a_dir not in self.database.db_dict:
                     eprint(f'specified directory not in list: {a_dir}')
                     sys.exit(1)
 
-        dprint(f'update directory_list: {directory_list}')
+        dprint(f'update dir_list: {dir_list}')
 
         # try to update each repo, keeing count
         ttl, successes, failures, failure_list = 0, 0, 0, []
         for a_dir in sorted(self.database.db_dict):
 
-            if directory_list and a_dir not in directory_list:
+            if dir_list and a_dir not in dir_list:
                 dprint(f'skipping directory: {a_dir}')
                 continue
 
@@ -77,16 +67,17 @@ class UpdateSubCommand(SubCommand):
         # remove progress tracking (XXX: huh?)
 
         # print summary report?
-        if not OPTS.quiet:
+        if not self.args.quiet:
             report_arr = [
                 '"Update" Summary Report',
                 '',
-                'Directories Updated: %3d' % ttl,
-                'Successes:           %3d' % successes,
-                'Failures:            %3d' % failures]
+                f'Directories Updated: {ttl:3d}',
+                f'Successes:           {successes:3d}',
+                f'Failures:            {failures:3d}',
+                ]
 
             if failures:
-                report_arr = report_arr + ['', 'Failure List:']
+                report_arr = [*report_arr, '', 'Failure List:']
                 for failure in failure_list:
                     report_arr.append('  ' + failure)
 

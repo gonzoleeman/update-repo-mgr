@@ -15,7 +15,7 @@ class ListSubCommand(SubCommand):
         dprint(f'List subcommand init routine: args={args}')
 
     def handle_command(self, short_help=None, long_help=None):
-        dprint('handling "list" subcommand')
+        dprint(f'handle_command("list", "{short_help}", "{long_help}")')
         self.database.print_list(long=self.args.long)
 
     @classmethod

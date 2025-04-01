@@ -19,17 +19,14 @@ class SvnRepo(Repo):
     @classmethod
     def is_mine(cls, repo_dir):
         dprint(f'Looking for ".svn" subdirectory under "{repo_dir}"')
-        res = os.path.isdir('%s/.svn' % repo_dir)
-        dprint(f'This is an SVN directory: {res}')
-        return res
+        return os.path.isdir(f'{repo_dir}/.svn')
 
     def update(self, opts):
         dprint(f'svn update (opts={opts})')
         svn_cmd = ['svn', 'update']
         if opts.quiet:
             svn_cmd.append('-q')
-        res = run_cmd_in_dir(self.repo_dir, svn_cmd)
-        return res
+        return run_cmd_in_dir(self.repo_dir, svn_cmd)
 
     def clean(self, opts):
         dprint(f'svn clean (opts={opts}) is a NOOP')

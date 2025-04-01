@@ -12,7 +12,6 @@ from .util import (
     )
 from .repos import clean_repo
 from .sub_command import SubCommand
-from .opts import OPTS
 
 
 class CleanSubCommand(SubCommand):
@@ -25,37 +24,38 @@ class CleanSubCommand(SubCommand):
 
     def handle_command(self, short_help=None, long_help=None):
         """Handle the 'clean' subcommand"""
-        dprint('handling "clean" subcommand')
+        dprint(f'handle_command("clean", "{short_help}", "{long_help}")')
 
-        dprint(f'clean: directories: {self.args.DIRECTORY}')
+        # XXX: we ignore errors in 'clean'?
 
-        directory_list = self.args.DIRECTORY
-        if directory_list:
+        dir_list = self.args.DIRECTORY
+        dprint(f'directories to clean: {dir_list}')
+        if dir_list:
             # validate directories
-            for a_dir in directory_list:
-                if not a_dir in self.database.db_dict:
+            for a_dir in dir_list:
+                if a_dir not in self.database.db_dict:
                     eprint(f'specified directory not in list: {a_dir}')
                     sys.exit(1)
 
-        dprint(f'update directory_list: {directory_list}')
+        dprint(f'updated dir_list: {dir_list}')
 
         # if update-in-progress and not continuing then error exit
         ttl, successes, failures, failure_list = 0, 0, 0, []
         for a_dir in sorted(self.database.db_dict.keys()):
 
-            if directory_list and a_dir not in directory_list:
+            if dir_list and a_dir not in dir_list:
                 dprint(f'skipping directory: {a_dir}')
                 continue
 
-            ttl = ttl + 1
+            ttl += 1
             repo_type = self.database.db_dict[a_dir]
             print_info(f'"Cleaning "{a_dir}" using "{repo_type}"')
             res = clean_repo(a_dir, repo_type, self.args)
             if res:
-                failures = failures + 1
+                failures += 1
                 failure_list.append(a_dir)
             else:
-                successes = successes + 1
+                successes += 1
             if res and self.args.stop_on_error:
                 print_info(f'Stopping because of error at "{a_dir}": {res}')
                 sys.exit(1)
@@ -64,16 +64,17 @@ class CleanSubCommand(SubCommand):
         # remove progress tracking ...
 
         # print summary report?
-        if not OPTS.quiet:
+        if not self.args.quiet:
             report_arr = [
                 '"Clean" Summary Report',
                 '',
-                'Directories Cleaned: %3d' % ttl,
-                'Successes:           %3d' % successes,
-                'Failures:            %3d' % failures]
+                f'Directories Cleaned: {ttl:3d}',
+                f'Successes:           {successes:3d}',
+                f'Failures:            {failures:3d}',
+                ]
 
             if failures:
-                report_arr = report_arr + ['', 'Failure List:']
+                report_arr = [*report_arr, '', 'Failure List:']
                 for failure in failure_list:
                     report_arr.append('  ' + failure)
 

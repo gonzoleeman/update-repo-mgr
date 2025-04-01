@@ -18,21 +18,21 @@ class RmSubCommand(SubCommand):
 
     def handle_command(self, short_help=None, long_help=None):
         """Handle the 'rm' (remove) subcommand"""
-        dprint('handling "rm" subcommand')
+        dprint(f'handle_command("rm", "{short_help}", "{long_help}")')
 
         dir_list = self.args.DIRECTORY
+        dprint(f'directores to remove: {dir_list}')
+        result = 0
 
         # XXX: TODO
         # check for interrupted update in progress
         # if update-in-progress print error message and exit
 
-        result = 0
-
         for a_dir in dir_list:
+            dprint(f'Looking at directory to remove: {a_dir} ...')
+
             repo_path = os.path.abspath(a_dir)
-
             # we do not care if the repo_path exists, since we are removing it
-
             if not self.database.entry_present(repo_path):
                 eprint(f'no such entry present: {repo_path}')
                 result = 1

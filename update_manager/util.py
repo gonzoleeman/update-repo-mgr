@@ -14,7 +14,8 @@ def dprint(*args):
         print('DEBUG: ', file=sys.stderr, end='')
         for arg in args:
             print(arg, file=sys.stderr, end='')
-        print('', file=sys.stderr)
+        print(file=sys.stderr)
+
 
 def eprint(*args):
     """Error printing"""
@@ -22,7 +23,8 @@ def eprint(*args):
         print('Error: ', file=sys.stderr, end='')
         for arg in args:
             print(arg, file=sys.stderr, end='')
-        print('', file=sys.stderr)
+        print(file=sys.stderr)
+
 
 def wprint(*args):
     """Warning printing"""
@@ -30,7 +32,8 @@ def wprint(*args):
         print('Warning: ', file=sys.stderr, end='')
         for arg in args:
             print(arg, file=sys.stderr, end='')
-        print('', file=sys.stderr)
+        print(file=sys.stderr)
+
 
 def print_info(*args):
     """Print informational message"""
@@ -42,6 +45,7 @@ def print_info(*args):
         print()
         print('***')
 
+
 def print_multiline_info(lines):
     """Print an informational message that is more than one line"""
     if not OPTS.quiet:
@@ -49,6 +53,7 @@ def print_multiline_info(lines):
         for a_line in lines:
             print('*** ' + a_line)
         print('***')
+
 
 def run_cmd_in_dir(dir_path, cmd_arr):
     """
@@ -61,8 +66,9 @@ def run_cmd_in_dir(dir_path, cmd_arr):
     wstat = my_proc.returncode
     if wstat != 0:
         dprint(f'error: ret_stat={wstat}')
-        print_info('warning: "{cmd_str}" in {dir_path} failed')
+        print_info(f'warning: "{cmd_str}" in {dir_path} failed')
     return wstat
+
 
 def run_cmd_in_dir_ret_output(dir_path, cmd_arr):
     """

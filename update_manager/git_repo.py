@@ -10,7 +10,9 @@ from .util import (
     dprint,
     )
 from .repo import Repo
-from .opts import OPTS
+
+GIT_CLEAN_LEVEL_1 = 1
+GIT_CLEAN_LEVEL_2 = 2
 
 
 class GitRepo(Repo):
@@ -24,7 +26,7 @@ class GitRepo(Repo):
     def is_mine(cls, repo_dir):
         dprint(f'Looking for ".git" subdirectory under "{repo_dir}"')
 
-        if not os.path.isdir('%s/.git' % repo_dir):
+        if not os.path.isdir(f'{repo_dir}/.git'):
             dprint('No ".git" subdirectory found')
             return False
 
@@ -42,51 +44,44 @@ class GitRepo(Repo):
 
         return False
 
-    def update(self, opts):
-        dprint(f'git update (opts={opts})')
+    def update(self, args):
+        dprint(f'git update (args={args})')
         git_cmd = ['git', 'pull', '--all']
-        if opts.verbose:
+        if args.verbose:
             git_cmd.append('-v')
         git_cmd.append('--prune')
-        res = run_cmd_in_dir(self.repo_dir, git_cmd)
-        dprint(f'"update" for git returning: {res}')
-        return res
+        return run_cmd_in_dir(self.repo_dir, git_cmd)
 
-    def clean(self, opts):
-        dprint(f'git clean (opts={opts})')
-
+    def clean(self, args):
+        dprint(f'git clean (args={args})')
         ret_res = 0
-
-        if opts.level > 1:
+        if args.level > GIT_CLEAN_LEVEL_1:
             git_cmd = ['git', 'remote']
-            if opts.verbose:
+            if args.verbose:
                 git_cmd.append('-v')
-            git_cmd = git_cmd + ['update', '--prune', 'origin']
+            git_cmd = [*git_cmd, 'update', '--prune', 'origin']
             res = run_cmd_in_dir(self.repo_dir, git_cmd)
             if res:
-                if opts.stop_on_error:
+                if args.stop_on_error:
                     return res
                 ret_res = res
-
-            if opts.level > 2:
+            if args.level > GIT_CLEAN_LEVEL_2:
                 git_cmd = ['git', 'prune']
-                if not opts.verbose:
+                if not args.verbose:
                     git_cmd.append('-v')
                 res = run_cmd_in_dir(self.repo_dir, git_cmd)
                 if res:
-                    if opts.stop_on_error:
+                    if args.stop_on_error:
                         return res
                     ret_res = res
-
         git_cmd = ['git', 'gc']
-        if OPTS.quiet:
+        if args.quiet:
             git_cmd.append('--quiet')
-        if opts.level > 1:
+        if args.level > GIT_CLEAN_LEVEL_1:
             git_cmd.append('--aggressive')
         res = run_cmd_in_dir(self.repo_dir, git_cmd)
         if res:
-            if opts.stop_on_error:
+            if args.stop_on_error:
                 return res
             ret_res = res
-
         return ret_res

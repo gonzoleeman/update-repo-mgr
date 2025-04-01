@@ -19,20 +19,13 @@ class OscRepo(Repo):
     @classmethod
     def is_mine(cls, repo_dir):
         dprint(f'Looking for ".osc" subdirectory under "{repo_dir}"')
-
-        res = os.path.isdir('%s/.osc' % repo_dir)
-        dprint(f'check for OSC directory returned: {res}')
-        return res
+        return os.path.isdir(f'{repo_dir}/.osc')
 
     def update(self, opts):
         dprint(f'osc update (opts={opts})')
-        if opts.verbose:
-            osc_cmd = ['osc', '-v', 'update']
-        else:
-            osc_cmd = ['osc', 'update']
-        res = run_cmd_in_dir(self.repo_dir, osc_cmd)
-        return res
+        osc_cmd = ['osc', '-v', 'update'] if opts.verbose else ['osc', 'update']
+        return run_cmd_in_dir(self.repo_dir, osc_cmd)
 
     def clean(self, opts):
-        dprint(f'osc clean (c={opts.level}) is a NOOP')
+        dprint(f'osc clean (level={opts.level}) is a NOOP')
         return 0

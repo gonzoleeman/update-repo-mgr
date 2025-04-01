@@ -27,3 +27,25 @@ Items todo:
 
 * add selt-tests! -- pyunit is ok for unit testing, but we also
   need command-level testing
+
+  Looking at: pytest, pytest-cov
+
+  What about: pyunit?
+
+* Handle "exceptions" better -- right now, in many (all?) cases,
+  error handling is done like C: do an exit, or return a failure,
+  but never create an exception, because those are ugly
+
+  But that's not pythonic
+
+* Test 'quiet' option -- not sure it does anything
+
+* Find a better way to pass short help and long help (remove them?)
+
+* add subcommand uses absolute path, but other subcommands don't?
+
+* make "short help" vs "long help" (e.g. use "-l"?)
+
+* make "clean" method in repo classes optional
+perhaps define class method as static? somehow there needs to be
+a default method, if the sub-class does't define it, that does nothing

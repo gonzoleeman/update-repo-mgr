@@ -12,11 +12,11 @@ from .clean_sub_command import CleanSubCommand
 
 
 SUBCMD_DICT = {
-    'list' : ListSubCommand,
-    'add' : AddSubCommand,
-    'rm' : RmSubCommand,
-    'update' : UpdateSubCommand,
-    'clean' : CleanSubCommand,
+    'list': ListSubCommand,
+    'add': AddSubCommand,
+    'rm': RmSubCommand,
+    'update': UpdateSubCommand,
+    'clean': CleanSubCommand,
     }
 
 
