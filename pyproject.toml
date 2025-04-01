@@ -35,4 +35,3 @@ source = "vcs"
 
 [tool.hatch.build.targets.wheel]
 packages = ["update_manager"]
-
