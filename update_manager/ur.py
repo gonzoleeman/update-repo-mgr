@@ -8,54 +8,126 @@ Will handle multiiple repository types.
 
 import sys
 import os
-from optparse import OptionParser
+from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
+import textwrap
 
 from update_manager import __version__ as ur_version
 
-from .Opts import Opts, OPTS
-from .subcmd import subcmd_in_list, handle_subcmd
-from .Database import Database
+from .opts import Opts, OPTS
+from .subcmd import handle_subcmd, SUBCMD_DICT
+from .database import Database
+from .util import dprint
+
+from .list_sub_command import ListSubCommand
 
 
-def parse_args():
+def reformat_subcmd_help(msg):
+    """
+    Reformat subcommand help message, of the form:
+
+    > usage: ur SUBCMD ...
+    > ... (more lines)
+
+    by: * removing "usage: " from the first line
+        * indenting all lines 4 spaces
+        * adding a blank line at the end
+    """
+    lines = msg.splitlines()
+    return_lines = []
+
+    for line in lines:
+        if line.startswith('usage: '):
+            line = 'sh> ' + line[len('usage: '):]
+        line = 4 * ' ' + line
+        return_lines += [line]
+    return_lines += ['', '']
+
+    return '\n'.join(return_lines)
+
+def define_parser():
+    """set up parser with subparsers"""
+    parent_parser = ArgumentParser(
+        description='For managing repository update and cleaning.',
+        formatter_class=RawDescriptionHelpFormatter)
+
+    parent_parser.add_argument(
+        '-V', '--version',
+        action='version',
+        version=f'%(prog)s {ur_version}',
+        help='print version information and exit')
+    parent_parser.add_argument(
+        '-d', '--debug',
+        action='store_true',
+        default=False,
+        help='enter debug mode')
+    parent_parser.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        default=False,
+        help='do not produce output')
+    parent_parser.add_argument(
+        '-D', '--db-directory',
+        nargs=1,
+        type=str,
+        default=OPTS.db_dir,
+        help=f'override default DB directory ({OPTS.db_dir}))')
+
+    subparsers = parent_parser.add_subparsers(dest='subcommand')
+    subcmd_help = ['subcommand usage:\n', '\n']
+    for subcmd_name in SUBCMD_DICT:
+        sub_parser = subparsers.add_parser(
+            subcmd_name,
+            add_help=False,
+            description=SUBCMD_DICT[subcmd_name].__doc__,
+            help=SUBCMD_DICT[subcmd_name].__doc__)
+        # call class method to set up arguments for this class
+        subcmd_class = SUBCMD_DICT[subcmd_name]
+        if subcmd_name == 'help':
+            subcmd_class.add_options(sub_parser, SUBCMD_DICT)
+        else:
+            subcmd_class.add_options(sub_parser)
+
+        # set up subcommand usage
+        subcmd_msg = sub_parser.format_help()
+        subcmd_help += [reformat_subcmd_help(subcmd_msg)]
+
+        # XXX: this is the shorter version ....
+        #subcmd_msg = sub_parser.format_usage().split()
+        #if subcmd_msg[0] == 'usage:':
+        #    subcmd_msg = subcmd_msg[1:]
+        #subcmd_help += [4 * ' ' + ' '.join(subcmd_msg)]
+
+    parent_parser.epilog = ''.join(subcmd_help)
+
+    return parent_parser
+
+
+def parse_args() -> Namespace:
     """Parse command-line arguments"""
-    parser = OptionParser(version='%prog ' + ur_version,
-                          usage=\
-                           'Usage: %prog [options] SUBCOMMAND [subcmd_opts]\n' + \
-                           '\n' + \
-                           'Use "%prog help subcommands" for a list of subcommands',
-                          description='For managing repository update and cleaning.')
-    parser.disable_interspersed_args()
-    parser.add_option('-d', '--debug', action='store_true', default=False,
-                      help='enter debug mode')
-    parser.add_option('-q', '--quiet', action='store_true', default=False,
-                      help='do not produce output')
-    (options, arguments) = parser.parse_args()
-    OPTS.debug = options.debug
-    OPTS.quiet = options.quiet
-    if not arguments:
-        parser.error("Subcommand required. Use '--help' for details")
-        sys.exit(1)
-    subcmd = arguments[0]
-    subcmd_args = arguments[1:]
-    if not subcmd_in_list(subcmd):
-        parser.error("Unrecognized subcommand: '%s'." % subcmd)
-        sys.exit(1)
-    return (parser, subcmd, subcmd_args)
+    parser = define_parser()
+    args = parser.parse_args()
+    OPTS.debug = args.debug
+    OPTS.quiet = args.quiet
+    dprint(f'args: {args}')
+    return (parser, args)
 
 
 def main():
     """Main entry point"""
-    (parser, subcmd, subcmd_args) = parse_args()
-    db = Database()
+    (parser, args) = parse_args()
+    # set up the database (if needed)
+    if args.subcommand == 'help':
+        db = None
+    else:
+        db = Database()
     try:
-        res = handle_subcmd(db, parser, subcmd, subcmd_args)
+        res = handle_subcmd(db, parser, args)
     except KeyboardInterrupt:
-        print("\nInterrupted")
+        print('\nInterrupted')
         # XXX: clean up?
         return 1
-    return res
 
+    return res
 
 if __name__ == '__main__':
     main()

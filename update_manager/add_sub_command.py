@@ -4,52 +4,63 @@ The 'add' subcommand
 
 import sys
 import os
-from optparse import OptionParser
 
-from .Util import dprint, print_info, eprint
+from .util import dprint, print_info, eprint
 from .repos import find_owner
-from .SubCommand import SubCommand
+from .sub_command import SubCommand
 
 
 class AddSubCommand(SubCommand):
-    def __init__(self, db):
-        SubCommand.__init__(self, db, 'add', 'add [options] [REPO-PATH]',
-                            'Add a repository to the database.')
-        dprint("Add subcommand init routine ...")
+    """
+    Add one or more repositories to the database
+    """
 
-    def handle_command(self, cmd_args):
-        dprint("handling 'add' args=%s subcommand" % cmd_args)
-        (options, arguments) = self.parser.parse_args(cmd_args)
+    def __init__(self, db, parser, args):
+        SubCommand.__init__(self, db, parser, args)
+        dprint(f'"add" subcommand init routine, args={args}')
 
-        if not arguments:
-            # use default of current working directory
-            repo_path = os.getcwd()
-        elif len(arguments) == 1:
-            arg_supplied = arguments.pop()
-            repo_path = os.path.abspath(arg_supplied)
+    def handle_command(self):
+        dprint(f'handling "add" subcommand (dirs={self.args.DIRECTORY})')
+
+        dir_list = self.args.DIRECTORY
+
+        result = 0
+
+        dprint(f'Looking at dir_list={dir_list}')
+        for a_dir in dir_list:
+            dprint(f'Looking at directory to add: {a_dir} ...')
+
+            repo_path = os.path.abspath(a_dir)
             if not os.path.isdir(repo_path):
-                self.parser.error(\
-                    "Supplied path must reference a directory: %s" %
-                    arg_supplied)
-                sys.exit(1)
-        else:
-            self.parser.error("Must supply one pathname max")
-            sys.exit(1)
+                eprint(f'Supplied path must reference a directory: {repo_path}')
+                result = 1
+                continue
+            
+            # XXX: TODO
+            # check for interrupted update in progress
+            # if update-in-progress print error message and exit
 
-        # check for interrupted update in progress
-        # if update-in-progress print error message and exit
+            if self.db.entry_present(repo_path):
+                eprint(f'path already present: {repo_path}')
+                result = 1
+                continue
 
-        if self.db.entry_present(repo_path):
-            eprint("path already present: %s" % repo_path)
-            sys.exit(1)
+            repo_type = find_owner(repo_path)
 
-        repo_type = find_owner(repo_path)
+            if repo_type is None:
+                eprint(f'error: Unknown or unsupported repo type: {repo_path}')
+                result = 1
+                continue
 
-        if repo_type is None:
-            eprint("error: Unknown or unsupported repo type: %s" %
-                   repo_path)
-            sys.exit(1)
+            # now finally add it to the list
+            print_info(f'Adding dir: {repo_path}')
+            self.db.add_to_list(repo_path, repo_type)
 
-        # now finally add it to the list
-        print_info("Adding dir: " + repo_path)
-        self.db.add_to_list(repo_path, repo_type)
+        return result
+
+    @classmethod
+    def add_options(cls, parser):
+        """Add appropriate optoins"""
+        parser.add_argument('DIRECTORY',
+                            nargs='+',
+                            help='Directory to add')

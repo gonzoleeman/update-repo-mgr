@@ -23,3 +23,13 @@ Items todo:
 
 * show better progress info: at least the repo count?
   (e.g. at least repo number, or "N of M"?)
+
+* store/retrieve DB file as a single data struct.
+  - would require creating a data structure/class for the data
+
+* create a man page?
+
+* make subcommand gathering/usage automatic, i.e. any method in some
+  sub-directory, or matching a name pattern?
+
+* add selt-tests!

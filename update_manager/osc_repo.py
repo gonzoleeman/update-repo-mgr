@@ -6,25 +6,26 @@ OSC Repository Class
 import os
 import abc
 
-from .Util import dprint, run_cmd_in_dir
-from .Repo import Repo
+from .util import dprint, run_cmd_in_dir
+from .repo import Repo
 
 
 class OscRepo(Repo):
 
     def __init__(self, repo_dir):
         Repo.__init__(self, repo_dir)
-        dprint("OscRepo init routine repo_dir=%s ..." % self.repo_dir)
+        dprint(f'OscRepo init routine repo_dir={self.repo_dir}')
 
     @classmethod
     def is_mine(cls, repo_dir):
-        dprint("Looking for '.osc' subdirectory under '%s' ..." % repo_dir)
+        dprint(f'Looking for ".osc" subdirectory under "{repo_dir}"')
+
         res = os.path.isdir('%s/.osc' % repo_dir)
-        dprint("This is an OSC directory:", res)
+        dprint(f'check for OSC directory returned: {res}')
         return res
         
     def update(self, opts):
-        dprint("'osc' 'update' (opts=%s)" % opts)
+        dprint(f'osc update (opts={opts})')
         if opts.verbose:
             osc_cmd = ['osc', '-v', 'update']
         else:
@@ -33,5 +34,5 @@ class OscRepo(Repo):
         return res
 
     def clean(self, cleaning_level=1):
-        dprint("osc clean (c=%s) is a NOOP" % cleaning_level)
+        dprint(f'osc clean (c={cleaning_level}) is a NOOP')
         return 0

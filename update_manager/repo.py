@@ -6,7 +6,7 @@ Repository Class
 import os
 from abc import ABC, abstractmethod
 
-from .Util import dprint
+from .util import dprint
 
 
 class Repo(ABC):
@@ -17,7 +17,7 @@ class Repo(ABC):
     """
 
     def __init__(self, repo_dir):
-        dprint("'Repo' super-class init routine ..., dir=%s" % repo_dir)
+        dprint(f'"Repo" super-class init routine ..., dir={repo_dir}')
         self.__repo_dir = repo_dir
 
     @abstractmethod
