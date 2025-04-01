@@ -2,11 +2,8 @@
 Subcommand interface
 """
 
-import sys
+from .util import dprint
 
-from .util import dprint, eprint
-
-from .sub_command import SubCommand
 from .list_sub_command import ListSubCommand
 from .add_sub_command import AddSubCommand
 from .rm_sub_command import RmSubCommand
@@ -23,14 +20,15 @@ SUBCMD_DICT = {
     }
 
 
-def handle_subcmd(db, parser, args):
+def handle_subcmd(database, parser, args):
+    """Handle the validated subcommand"""
     subcmd_name = args.subcommand
 
     dprint(f'handle_subcmd({subcmd_name}): entered')
 
     # create an instance of our subcommand class
     subcmd_class = SUBCMD_DICT[subcmd_name]
-    subcmd = subcmd_class(db, parser, args)
+    subcmd = subcmd_class(database, parser, args)
 
     # let the subcommand class instnace handle the command
     return subcmd.handle_command()

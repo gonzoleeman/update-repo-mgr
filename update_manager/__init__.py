@@ -2,8 +2,8 @@
 This file is part of the Update Manager library
 """
 
-import importlib.metadata
+from importlib.metadata import version
 
-__version__ = importlib.metadata.version('ur')
+__version__ = version('ur')
 
-__all__ = [ 'ur' ]
+__all__ = ['ur']

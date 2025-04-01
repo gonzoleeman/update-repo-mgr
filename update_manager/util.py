@@ -2,7 +2,6 @@
 Utility routines for update repository
 """
 
-import os
 import sys
 import subprocess
 
@@ -34,6 +33,7 @@ def wprint(*args):
         print('', file=sys.stderr)
 
 def print_info(*args):
+    """Print informational message"""
     if not OPTS.quiet:
         print('***')
         print('*** ', end='')
@@ -43,10 +43,11 @@ def print_info(*args):
         print('***')
 
 def print_multiline_info(lines):
+    """Print an informational message that is more than one line"""
     if not OPTS.quiet:
         print('***')
-        for l in lines:
-            print('*** ' + l)
+        for a_line in lines:
+            print('*** ' + a_line)
         print('***')
 
 def run_cmd_in_dir(dir_path, cmd_arr):
@@ -55,9 +56,9 @@ def run_cmd_in_dir(dir_path, cmd_arr):
     """
     cmd_str = ' '.join(cmd_arr)
     dprint(f'Running (dir={dir_path}) cmd: "{cmd_str}"')
-    p = subprocess.Popen(cmd_arr, cwd=dir_path)
-    p.communicate()
-    wstat = p.returncode
+    my_proc = subprocess.Popen(cmd_arr, cwd=dir_path)
+    my_proc.communicate()
+    wstat = my_proc.returncode
     if wstat != 0:
         dprint(f'error: ret_stat={wstat}')
         print_info('warning: "{cmd_str}" in {dir_path} failed')
@@ -72,17 +73,16 @@ def run_cmd_in_dir_ret_output(dir_path, cmd_arr):
     """
     cmd_str = ' '.join(cmd_arr)
     dprint(f'Running [save output] (dir={dir_path}) cmd: "{cmd_str}"')
-    p = subprocess.Popen(cmd_arr, cwd=dir_path, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
-    (std_output, err_output) = p.communicate()
+    my_proc = subprocess.Popen(cmd_arr, cwd=dir_path, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    (std_output, err_output) = my_proc.communicate()
     if std_output:
         dprint(f'std_output: {std_output}')
     if err_output:
         dprint(f'err_output: {err_output}')
-    wstat = p.returncode
+    wstat = my_proc.returncode
     dprint(f'wstat= {wstat}')
     if wstat != 0:
         dprint(f'error: ret_stat= {wstat}')
         print_info(f'warning: "{cmd_str}" in {dir_path} failed')
     return (wstat, std_output)
-

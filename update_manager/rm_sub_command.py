@@ -12,11 +12,11 @@ class RmSubCommand(SubCommand):
     """
     Remove one or more repositories from the database
     """
-    def __init__(self, db, parser, args):
-        SubCommand.__init__(self, db, parser, args)
+    def __init__(self, database, parser, args):
+        SubCommand.__init__(self, database, parser, args)
         dprint(f'"rm" subcommand init routine, args={args}')
 
-    def handle_command(self):
+    def handle_command(self, short_help=None, long_help=None):
         """Handle the 'rm' (remove) subcommand"""
         dprint('handling "rm" subcommand')
 
@@ -33,14 +33,14 @@ class RmSubCommand(SubCommand):
 
             # we do not care if the repo_path exists, since we are removing it
 
-            if not self.db.entry_present(repo_path):
+            if not self.database.entry_present(repo_path):
                 eprint(f'no such entry present: {repo_path}')
                 result = 1
                 continue
 
             # now finally remove it from the list
             print_info(f'Removing dir: {repo_path}')
-            self.db.rm_from_list(repo_path)
+            self.database.rm_from_list(repo_path)
 
         return result
 
@@ -50,4 +50,3 @@ class RmSubCommand(SubCommand):
         parser.add_argument('DIRECTORY',
                             nargs='+',
                             help='Directory to remove')
-            

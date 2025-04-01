@@ -4,14 +4,13 @@ svn (subversion) Repository Class
 
 
 import os
-import abc
 
 from .repo import Repo
-from .util import dprint
-from .opts import OPTS
+from .util import dprint, run_cmd_in_dir
 
 
 class SvnRepo(Repo):
+    """Class representing subversion repositories"""
 
     def __init__(self, repo_dir):
         Repo.__init__(self, repo_dir)
@@ -24,14 +23,14 @@ class SvnRepo(Repo):
         dprint(f'This is an SVN directory: {res}')
         return res
 
-    def update(self, stop_on_error=True):
-        dprint(f'svn update (s={stop_on_error})')
+    def update(self, opts):
+        dprint(f'svn update (opts={opts})')
         svn_cmd = ['svn', 'update']
-        if OPTS.quiet:
+        if opts.quiet:
             svn_cmd.append('-q')
         res = run_cmd_in_dir(self.repo_dir, svn_cmd)
         return res
 
-    def clean(self, cleaning_level=1):
-        dprint(f'svn clean (c={cleaning_level}) is a NOOP')
+    def clean(self, opts):
+        dprint(f'svn clean (opts={opts}) is a NOOP')
         return 0

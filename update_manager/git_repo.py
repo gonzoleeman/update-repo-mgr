@@ -2,9 +2,7 @@
 Git Repository Class
 """
 
-
 import os
-import abc
 
 from .util import (
     run_cmd_in_dir,
@@ -16,6 +14,7 @@ from .opts import OPTS
 
 
 class GitRepo(Repo):
+    """Class representing a 'git' repository"""
 
     def __init__(self, repo_dir):
         Repo.__init__(self, repo_dir)
@@ -89,6 +88,5 @@ class GitRepo(Repo):
             if opts.stop_on_error:
                 return res
             ret_res = res
- 
-        return ret_res
 
+        return ret_res

@@ -6,19 +6,14 @@ repositories easier. For Hack Week 2017!
 Will handle multiiple repository types.
 """
 
-import sys
-import os
 from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
-import textwrap
 
 from update_manager import __version__ as ur_version
 
-from .opts import Opts, OPTS
+from .opts import OPTS
 from .subcmd import handle_subcmd, SUBCMD_DICT
 from .database import Database
 from .util import dprint
-
-from .list_sub_command import ListSubCommand
 
 
 def reformat_subcmd_help(msg):
@@ -106,22 +101,25 @@ def parse_args() -> Namespace:
     """Parse command-line arguments"""
     parser = define_parser()
     args = parser.parse_args()
+    if args.subcommand is None:
+        parser.error('Must supply subcommand')
     OPTS.debug = args.debug
     OPTS.quiet = args.quiet
     dprint(f'args: {args}')
     return (parser, args)
 
-
 def main():
     """Main entry point"""
     (parser, args) = parse_args()
+
     # set up the database (if needed)
     if args.subcommand == 'help':
-        db = None
+        database = None
     else:
-        db = Database()
+        database = Database()
+
     try:
-        res = handle_subcmd(db, parser, args)
+        res = handle_subcmd(database, parser, args)
     except KeyboardInterrupt:
         print('\nInterrupted')
         # XXX: clean up?

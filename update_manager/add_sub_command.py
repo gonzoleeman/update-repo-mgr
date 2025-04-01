@@ -2,7 +2,6 @@
 The 'add' subcommand
 """
 
-import sys
 import os
 
 from .util import dprint, print_info, eprint
@@ -15,11 +14,11 @@ class AddSubCommand(SubCommand):
     Add one or more repositories to the database
     """
 
-    def __init__(self, db, parser, args):
-        SubCommand.__init__(self, db, parser, args)
+    def __init__(self, database, parser, args):
+        SubCommand.__init__(self, database, parser, args)
         dprint(f'"add" subcommand init routine, args={args}')
 
-    def handle_command(self):
+    def handle_command(self, short_help=None, long_help=None):
         dprint(f'handling "add" subcommand (dirs={self.args.DIRECTORY})')
 
         dir_list = self.args.DIRECTORY
@@ -35,12 +34,12 @@ class AddSubCommand(SubCommand):
                 eprint(f'Supplied path must reference a directory: {repo_path}')
                 result = 1
                 continue
-            
+
             # XXX: TODO
             # check for interrupted update in progress
             # if update-in-progress print error message and exit
 
-            if self.db.entry_present(repo_path):
+            if self.database.entry_present(repo_path):
                 eprint(f'path already present: {repo_path}')
                 result = 1
                 continue
@@ -54,7 +53,7 @@ class AddSubCommand(SubCommand):
 
             # now finally add it to the list
             print_info(f'Adding dir: {repo_path}')
-            self.db.add_to_list(repo_path, repo_type)
+            self.database.add_to_list(repo_path, repo_type)
 
         return result
 

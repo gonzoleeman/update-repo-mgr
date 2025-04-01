@@ -16,14 +16,16 @@ class Database:
     """
     This class represents the database for the update manager
     """
-    def __init__(self, def_db_dir=None):
-        self.ur_dir = os.getenv('UR_DIR',os.path.expanduser('~/.ur_dir'))
+    def __init__(self):
+        self.ur_dir = os.getenv('UR_DIR', os.path.expanduser('~/.ur_dir'))
         self.ensure_ur_dir()
         self.__db_file = os.path.join(self.ur_dir, DB_FILE)
+        self.__db_dict = {}
         self.ensure_valid_db_file()
 
     @property
     def db_dict(self):
+        """return the database dictionary"""
         return self.__db_dict
 
     def ensure_ur_dir(self):
@@ -38,24 +40,24 @@ class Database:
 
     def read_and_validate_db_file(self):
         """Read DB file and validate header is correct"""
-        dprint('Reading DB file ...')
-        self.__db_dict = {}
+        dprint(f'Reading DB file ({self.__db_file})')
         with open(self.__db_file, 'r') as dbf:
             hdr = dbf.read(DB_HEADER_LEN)
             if hdr != DB_HEADER:
                 eprint(f'database file corrupted: {self.__db_file}')
                 sys.exit(1)
-            for e in dbf:
-                dprint('Adding line: "{e.rstrip()}"')
-                i = e.split()
-                if len(i) != 2:
+            for entry in dbf:
+                dprint(f'Adding line: "{entry.rstrip()}"')
+                entry_split = entry.split()
+                if len(entry_split) != 2:
                     eprint(f'database file correctuped: {self.__db_file}')
-                    print(f'line: /{e}/', file=sys.stderr)
+                    print(f'line: /{entry}/', file=sys.stderr)
                     sys.exit(1)
-                self.__db_dict[i[1]] = i[0]
+                self.__db_dict[entry_split[1]] = entry_split[0]
         dprint(f'resulting db_dict: {self.__db_dict}')
 
     def ensure_valid_db_file(self):
+        """Ensure the database isn't corrupt"""
         if not os.path.isfile(self.__db_file):
             dprint('Initializing DB file with header ...')
             with open(self.__db_file, 'w') as dbf:
@@ -66,12 +68,12 @@ class Database:
     def print_list(self, long=False):
         """Print the list of directories from our database"""
         dprint(f'Printing DB lines (long={long})')
-        for k in sorted(self.__db_dict.keys()):
+        for a_key in sorted(self.__db_dict):
             if long:
-                v = self.__db_dict[k]
-                print(f'{v}\t{k}')
+                a_value = self.__db_dict[a_key]
+                print(f'{a_value}\t{a_key}')
             else:
-                print(k)
+                print(a_key)
 
     def entry_present(self, repo_dir):
         """Is this entry already present?"""
@@ -96,7 +98,7 @@ class Database:
         with open(self.__db_file, 'w') as dbf:
             dbf.write(DB_HEADER)
             for k in sorted(self.__db_dict.keys()):
-                v = self.__db_dict[k]
-                l = v + '\t' + k
-                dprint(f'Writing out DB line: /{l}/')
-                print(l, file=dbf)
+                a_value = self.__db_dict[k]
+                a_line = a_value + '\t' + k
+                dprint(f'Writing out DB line: /{a_line}/')
+                print(a_line, file=dbf)

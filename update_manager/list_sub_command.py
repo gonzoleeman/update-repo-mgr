@@ -10,13 +10,13 @@ class ListSubCommand(SubCommand):
     """
     List directories being managed
     """
-    def __init__(self, db, parser, args):
-        SubCommand.__init__(self, db, parser, args)
+    def __init__(self, database, parser, args):
+        SubCommand.__init__(self, database, parser, args)
         dprint(f'List subcommand init routine: args={args}')
 
-    def handle_command(self):
+    def handle_command(self, short_help=None, long_help=None):
         dprint('handling "list" subcommand')
-        self.db.print_list(long=self.args.long)
+        self.database.print_list(long=self.args.long)
 
     @classmethod
     def add_options(cls, parser):

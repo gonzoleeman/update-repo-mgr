@@ -6,7 +6,6 @@ import sys
 
 from .util import (
     dprint,
-    wprint,
     eprint,
     print_multiline_info,
     print_info,
@@ -20,11 +19,11 @@ class UpdateSubCommand(SubCommand):
     """
     Update one or more repo directories
     """
-    def __init__(self, db, parser, args):
-        SubCommand.__init__(self, db, parser, args)
+    def __init__(self, database, parser, args):
+        SubCommand.__init__(self, database, parser, args)
         dprint('"update" subcommand init routine, args={args}')
 
-    def handle_command(self):
+    def handle_command(self, short_help=None, long_help=None):
         dprint('handling "update" subcommand')
 
         # XXX
@@ -39,38 +38,38 @@ class UpdateSubCommand(SubCommand):
         if directory_list:
             # validate directories
             for a_dir in directory_list:
-                if not a_dir in self.db.db_dict:
+                if not a_dir in self.database.db_dict:
                     eprint(f'specified directory not in list: {a_dir}')
                     sys.exit(1)
 
         dprint(f'update directory_list: {directory_list}')
-        
+
         # try to update each repo, keeing count
         ttl, successes, failures, failure_list = 0, 0, 0, []
-        for repo_dir in sorted(self.db.db_dict):
+        for a_dir in sorted(self.database.db_dict):
 
-            if directory_list and repo_dir not in directory_list:
-                dprint(f'skipping directory: {repo_dir}')
+            if directory_list and a_dir not in directory_list:
+                dprint(f'skipping directory: {a_dir}')
                 continue
 
             ttl += 1
 
-            repo_type = self.db.db_dict[repo_dir]
+            repo_type = self.database.db_dict[a_dir]
 
-            print_info(f'Updating "{repo_dir}" using "{repo_type}"')
+            print_info(f'Updating "{a_dir}" using "{repo_type}"')
 
-            res = update_repo(repo_dir, repo_type, self.args)
+            res = update_repo(a_dir, repo_type, self.args)
             dprint(f'update_repo: returned: {res}')
 
             if res:
                 failures += 1
-                failure_list.append(repo_dir)
+                failure_list.append(a_dir)
             else:
                 successes += 1
 
-            if res and options.stop_on_error:
+            if res and self.args.stop_on_error:
                 print_info(
-                    f'Stopping because of error at "{repo_dir}"; return={res}')
+                    f'Stopping because of error at "{a_dir}"; return={res}')
                 sys.exit(1)
 
             # XXX: mark directory as 'done'
@@ -88,8 +87,8 @@ class UpdateSubCommand(SubCommand):
 
             if failures:
                 report_arr = report_arr + ['', 'Failure List:']
-                for f in failure_list:
-                    report_arr.append('  ' + f)
+                for failure in failure_list:
+                    report_arr.append('  ' + failure)
 
             print_multiline_info(report_arr)
 

@@ -3,7 +3,6 @@ Repository Class
 """
 
 
-import os
 from abc import ABC, abstractmethod
 
 from .util import dprint
@@ -20,7 +19,7 @@ class Repo(ABC):
         dprint(f'"Repo" super-class init routine ..., dir={repo_dir}')
         self.__repo_dir = repo_dir
 
-    @abstractmethod
+    @classmethod
     def is_mine(cls, repo_dir):
         """class method: Is the supplied directory 'mine'?"""
 
@@ -29,7 +28,7 @@ class Repo(ABC):
         """Update this repo"""
 
     @abstractmethod
-    def clean(self, cleaning_level=1):
+    def clean(self, opts):
         """clean this repo"""
 
     @property

@@ -3,8 +3,6 @@ The repository top-level interface. This should be the only place that
 knows about individual repo types and abstracts it for others.
 """
 
-import sys
-
 from .util import dprint, eprint
 from .git_repo import GitRepo
 from .svn_repo import SvnRepo
@@ -36,6 +34,7 @@ def find_owner(repo_dir):
 
 
 def update_repo(repo_dir, repo_type, args):
+    """Update a repo"""
     dprint(f'update_repo called ({repo_dir}, {repo_type})')
 
     repo_obj = __REPO_DICT[repo_type]
@@ -51,6 +50,7 @@ def update_repo(repo_dir, repo_type, args):
 
 
 def clean_repo(repo_dir, repo_type, args):
+    """Clean a repo"""
     dprint(f'update_repo called ({repo_dir}, {repo_type})')
     repo_obj = __REPO_DICT[repo_type]
     try:
