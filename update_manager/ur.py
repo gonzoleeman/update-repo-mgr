@@ -103,6 +103,7 @@ def parse_args():
         parser.error('Must supply subcommand')
     OPTS.debug = args.debug
     OPTS.quiet = args.quiet
+    OPTS.db_dir = args.db_directory
     dprint(f'args: {args}')
     return (parser, args)
 
@@ -110,7 +111,7 @@ def parse_args():
 def main() -> int:
     """Main entry point"""
     (parser, args) = parse_args()
-    database = Database()
+    database = Database(OPTS.db_dir)
     try:
         res = handle_subcmd(database, parser, args)
     except KeyboardInterrupt:

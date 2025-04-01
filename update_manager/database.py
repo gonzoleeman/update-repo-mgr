@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from .util import dprint, eprint, print_info
+from .opts import OPTS
 
 DB_FILE = 'REPO_LIST'
 DB_HEADER = '#\n# Database file -- do not edit\n#\n'
@@ -16,12 +17,10 @@ DB_FILE_COLUMNS = 2
 
 
 class Database:
-    """
-    This class represents the database for the update manager
-    """
+    """This class represents the database for the update manager."""
 
-    def __init__(self):
-        self.ur_dir = os.getenv('UR_DIR', os.path.expanduser('~/.ur_dir'))
+    def __init__(self, db_dir=OPTS.db_dir):
+        self.ur_dir = os.getenv('UR_DIR', os.path.expanduser(db_dir))
         self.ensure_ur_dir()
         self.__db_file = os.path.join(self.ur_dir, DB_FILE)
         self.__db_dict = {}
