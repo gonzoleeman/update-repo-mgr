@@ -2,8 +2,8 @@
 
 import subprocess
 import sys
-import typing
 from pathlib import Path
+from typing import Any
 
 from .opts import OPTS
 
@@ -71,7 +71,8 @@ def run_cmd_in_dir(dir_path: Path, cmd_arr: list[str]) -> int:
     return wstat
 
 
-def run_cmd_in_dir_ret_output(dir_path: Path, cmd_arr: list[str]) -> (int, typing.TextIO):
+def run_cmd_in_dir_ret_output(dir_path: Path,
+                              cmd_arr: list[str]) -> tuple[int | Any, bytes]:
     """'cd' to dir_path, then run command
 
     Wait for result
@@ -85,9 +86,9 @@ def run_cmd_in_dir_ret_output(dir_path: Path, cmd_arr: list[str]) -> (int, typin
                                stderr=subprocess.PIPE)
     (std_output, err_output) = my_proc.communicate()
     if std_output:
-        dprint(f'std_output: {std_output}')
+        dprint(f'std_output: {std_output!s}')
     if err_output:
-        dprint(f'err_output: {err_output}')
+        dprint(f'err_output: {err_output!s}')
     wstat = my_proc.returncode
     dprint(f'wstat= {wstat}')
     if wstat != 0:

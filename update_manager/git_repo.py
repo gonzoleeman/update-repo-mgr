@@ -13,7 +13,7 @@ GIT_CLEAN_LEVEL_2 = 2
 class GitRepo(Repo):
     """Class representing a 'git' repository"""
 
-    def __init__(self, repo_path: str, args: Namespace) -> None:
+    def __init__(self, repo_path: Path, args: Namespace) -> None:
         """Initialize an GitRepo instance"""
         Repo.__init__(self, repo_path, args)
         dprint(f'GitRepo init routine repo_path={self.repo_path}, args={args}')
@@ -30,7 +30,7 @@ class GitRepo(Repo):
         (res, cmd_output) = run_cmd_in_dir_ret_output(repo_path,
                                                       ['git', 'remote', 'show'])
         dprint(f'command result: {res}')
-        dprint(f'command output: "{cmd_output}"')
+        dprint(f'command output: "{cmd_output!s}"')
         if cmd_output:
             dprint('This git repository has a remote')
             return True

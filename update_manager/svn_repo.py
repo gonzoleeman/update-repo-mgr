@@ -10,7 +10,7 @@ from .util import dprint, run_cmd_in_dir
 class SvnRepo(Repo):
     """Class representing subversion repositories"""
 
-    def __init__(self, repo_path: str, args: Namespace) -> None:
+    def __init__(self, repo_path: Path, args: Namespace) -> None:
         """Initialize an SvnRepo instance"""
         Repo.__init__(self, repo_path, args)
         dprint(f'SvnRepo init routine repo_path={self.repo_path}')
@@ -26,7 +26,7 @@ class SvnRepo(Repo):
         """Update this svn repo (NOP)"""
         dprint('svn update')
         svn_cmd = ['svn', 'update']
-        if self.opts.quiet:
+        if self.args.quiet:
             svn_cmd.append('-q')
         return run_cmd_in_dir(self.repo_path, svn_cmd)
 

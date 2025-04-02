@@ -15,7 +15,7 @@ class ListSubCommand(SubCommand):
         SubCommand.__init__(self, database, parser, args)
         dprint(f'List subcommand init routine: args={args}')
 
-    def handle_command(self) -> None:
+    def handle_command(self) -> int:
         """Handle the 'list' subcommand
 
         No directory names are expected
@@ -25,6 +25,7 @@ class ListSubCommand(SubCommand):
             self.database.print_list_long()
         else:
             self.database.print_list_short()
+        return 0
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:

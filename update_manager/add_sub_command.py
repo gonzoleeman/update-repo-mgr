@@ -32,7 +32,7 @@ class AddSubCommand(SubCommand):
                 eprint(f'Supplied path must reference a directory: {repo_path}')
                 result = 1
                 continue
-            if self.database.entry_present(repo_path):
+            if self.database.entry_present(str(repo_path)):
                 eprint(f'path already present: {repo_path}')
                 result = 1
                 continue

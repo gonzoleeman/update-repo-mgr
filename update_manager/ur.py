@@ -98,7 +98,7 @@ def define_parser() -> ArgumentParser:
     return parent_parser
 
 
-def parse_args() -> (ArgumentParser, Namespace):
+def parse_args() -> tuple[ArgumentParser, Namespace]:
     """Parse command-line arguments"""
     parser = define_parser()
     args = parser.parse_args()

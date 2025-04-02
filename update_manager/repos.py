@@ -39,10 +39,9 @@ def update_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
     """Update a repo"""
     dprint(f'update_repo called ({repo_path}, {repo_type}, {args})')
 
-    repo_obj = __REPO_DICT[repo_type]
     try:
-        repo = repo_obj(repo_path, args)
-        res = repo.update()
+        repo_obj = __REPO_DICT[repo_type](repo_path, args)
+        res = repo_obj.update()
     except FileNotFoundError:
         eprint(f'directy gone: {repo_path}. '
                'Consider using the "rm" subcommand to remove it')
