@@ -15,6 +15,15 @@ The Author and currently only maintainer:
     Lee Duncan
     lduncan@suse.com
 
+## Dependencies
+
+This package depends on the following python packages:
+
+* python: version 3.11 or higher
+* hatch: python-hatch
+* hatchling: python-hatchling
+* pip: python-pip
+
 ## Installation
 
 You can let python3's pip module do the work:
