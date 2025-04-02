@@ -1,47 +1,35 @@
-"""
-The 'clean' subcommand
-"""
+"""The 'clean' subcommand"""
 
 import sys
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
-from .util import (
-    dprint,
-    eprint,
-    print_multiline_info,
-    print_info,
-    )
+from .database import Database, skip_dirs_not_in_db
 from .repos import clean_repo
 from .sub_command import SubCommand
+from .util import dprint, print_info, print_multiline_info
 
 
 class CleanSubCommand(SubCommand):
-    """
-    Clean one or more repository directories
-    """
-    def __init__(self, database, parser, args):
+    """Clean one or more repository directories"""
+
+    def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
+        """Initialize clean subcommand."""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"clean" subcommand init routine, args={args}')
 
-    def handle_command(self, short_help=None, long_help=None):
+    def handle_command(self) -> int:
         """Handle the 'clean' subcommand"""
-        dprint(f'handle_command("clean", "{short_help}", "{long_help}")')
-
-        # XXX: we ignore errors in 'clean'?
-
+        # TODO(lee): we ignore errors in 'clean'?
         dir_list = self.args.DIRECTORY
-        dprint(f'directories to clean: {dir_list}')
+        dprint(f'handle_command("clean", dir_list={dir_list}) called')
         if dir_list:
             # validate directories
-            for a_dir in dir_list:
-                if a_dir not in self.database.db_dict:
-                    eprint(f'specified directory not in list: {a_dir}')
-                    sys.exit(1)
+            dir_list = skip_dirs_not_in_db(dir_list, self.database)
+            dprint(f'updated dir_list: {dir_list}')
 
-        dprint(f'updated dir_list: {dir_list}')
-
-        # if update-in-progress and not continuing then error exit
-        ttl, successes, failures, failure_list = 0, 0, 0, []
-        for a_dir in sorted(self.database.db_dict.keys()):
+        ttl, successes, failure_list = 0, 0, []
+        for a_dir in sorted(self.database.db_dict):
 
             if dir_list and a_dir not in dir_list:
                 dprint(f'skipping directory: {a_dir}')
@@ -49,10 +37,11 @@ class CleanSubCommand(SubCommand):
 
             ttl += 1
             repo_type = self.database.db_dict[a_dir]
+            # TODO(lee): should we check dir still present
             print_info(f'"Cleaning "{a_dir}" using "{repo_type}"')
-            res = clean_repo(a_dir, repo_type, self.args)
+            res = clean_repo(Path(a_dir).resolve(), repo_type, self.args)
+            dprint(f'clean_repo: returned: {res}')
             if res:
-                failures += 1
                 failure_list.append(a_dir)
             else:
                 successes += 1
@@ -61,9 +50,8 @@ class CleanSubCommand(SubCommand):
                 sys.exit(1)
             # mark directory as 'done'
 
-        # remove progress tracking ...
-
         # print summary report?
+        failures = len(failure_list)
         if not self.args.quiet:
             report_arr = [
                 '"Clean" Summary Report',
@@ -81,13 +69,10 @@ class CleanSubCommand(SubCommand):
             print_multiline_info(report_arr)
 
         # all done
-        subcmd_res = 0
-        if failures:
-            subcmd_res = 1
-        return subcmd_res
+        return 1 if failures else 0
 
     @classmethod
-    def add_options(cls, parser):
+    def add_options(cls, parser: ArgumentParser) -> None:
         """Add options for the "clean" subcommand"""
         parser.add_argument('-v', '--verbose',
                             action='store_true',

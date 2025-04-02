@@ -85,6 +85,8 @@ ignore = [
     "S603", # unsafe subprocess
     "S404", # subprocess is insecure
     "PLR6301", # XXX: because some "clean()" methods do nothing, for now
+    "D400", # doc strings shouldn't need a damn period -- it's not prose
+    "D415", # doc strings also don't need '!' or '?'
 ]
 
 [tool.ruff.lint.flake8-quotes]

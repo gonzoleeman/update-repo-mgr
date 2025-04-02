@@ -1,63 +1,64 @@
-"""
-Utility routines for update repository
-"""
+"""Utility routines for update repository"""
 
-import sys
 import subprocess
+import sys
+import typing
+from pathlib import Path
 
 from .opts import OPTS
 
 
-def dprint(*args):
+def dprint(*args: str) -> None:
     """Debug printing"""
     if OPTS.debug and args:
-        print('DEBUG: ', file=sys.stderr, end='')
+        print('DEBUG: ', file=sys.stderr, end='')   # noqa: T201
         for arg in args:
-            print(arg, file=sys.stderr, end='')
-        print(file=sys.stderr)
+            print(arg, file=sys.stderr, end='')     # noqa: T201
+        print(file=sys.stderr)                      # noqa: T201
 
 
-def eprint(*args):
+def eprint(*args: str) -> None:
     """Error printing"""
     if args:
-        print('Error: ', file=sys.stderr, end='')
+        print('Error: ', file=sys.stderr, end='')   # noqa: T201
         for arg in args:
-            print(arg, file=sys.stderr, end='')
-        print(file=sys.stderr)
+            print(arg, file=sys.stderr, end='')     # noqa: T201
+        print(file=sys.stderr)  # noqa: T201
 
 
-def wprint(*args):
+def wprint(*args: str) -> None:
     """Warning printing"""
     if args:
-        print('Warning: ', file=sys.stderr, end='')
+        print('Warning: ', file=sys.stderr, end='') # noqa: T201
         for arg in args:
-            print(arg, file=sys.stderr, end='')
-        print(file=sys.stderr)
+            print(arg, file=sys.stderr, end='')     # noqa: T201
+        print(file=sys.stderr)                      # noqa: T201
 
 
-def print_info(*args):
+def print_info(*args: str) -> None:
     """Print informational message"""
     if not OPTS.quiet:
-        print('***')
-        print('*** ', end='')
+        print('***')                                # noqa: T201
+        print('*** ', end='')                       # noqa: T201
         for arg in args:
-            print(arg + ' ', end='')
-        print()
-        print('***')
+            print(arg + ' ', end='')                # noqa: T201
+        print()                                     # noqa: T201
+        print('***')                                # noqa: T201
 
 
-def print_multiline_info(lines):
+def print_multiline_info(lines: list[str]) -> None:
     """Print an informational message that is more than one line"""
     if not OPTS.quiet:
-        print('***')
+        print('***')                                # noqa: T201
         for a_line in lines:
-            print('*** ' + a_line)
-        print('***')
+            print('*** ' + a_line)                  # noqa: T201
+        print('***')                                # noqa: T201
 
 
-def run_cmd_in_dir(dir_path, cmd_arr):
-    """
-    'cd' to dir_path, then run supplied command, waiting for result
+def run_cmd_in_dir(dir_path: Path, cmd_arr: list[str]) -> int:
+    """'cd' to 'dir_path', then run command
+
+    Wait for the result
     """
     cmd_str = ' '.join(cmd_arr)
     dprint(f'Running (dir={dir_path}) cmd: "{cmd_str}"')
@@ -70,9 +71,10 @@ def run_cmd_in_dir(dir_path, cmd_arr):
     return wstat
 
 
-def run_cmd_in_dir_ret_output(dir_path, cmd_arr):
-    """
-    'cd' to dir_path, then run supplied command, waiting for result
+def run_cmd_in_dir_ret_output(dir_path: Path, cmd_arr: list[str]) -> (int, typing.TextIO):
+    """'cd' to dir_path, then run command
+
+    Wait for result
 
     Also, the output will not be displayed but instead will be
     returned to the caller together with the exit status

@@ -1,41 +1,37 @@
 """The 'update' subcommand"""
 
 import sys
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
-from .util import (
-    dprint,
-    eprint,
-    print_multiline_info,
-    print_info,
-    )
+from .database import Database, skip_dirs_not_in_db
 from .repos import update_repo
 from .sub_command import SubCommand
+from .util import dprint, print_info, print_multiline_info
 
 
 class UpdateSubCommand(SubCommand):
-    """
-    Update one or more repo directories
-    """
-    def __init__(self, database, parser, args):
+    """Update one or more repo directories"""
+
+    def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
+        """Initialize instance of the update subcomand class"""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"update" subcommand init routine, args={args}')
 
-    def handle_command(self, short_help=None, long_help=None):
-        dprint(f'handle_command("update", "{short_help}", "{long_help}")')
+    def handle_command(self) -> int:
+        """Handle the 'update' subcommand
 
+        If directory names are specfied, we update each one if
+        it exists. If none are specified we updated all in the DB.
+        """
         dir_list = self.args.DIRECTORY
-        dprint(f'update: directories: {dir_list}')
+        dprint(f'handle_command("update", dir_list={dir_list}) called')
         if dir_list:
-            # ensure dir list passed in contains valid directories in the DB
-            for a_dir in dir_list:
-                if a_dir not in self.database.db_dict:
-                    eprint(f'specified directory not in list: {a_dir}')
-                    sys.exit(1)
+            # validate directories
+            dir_list = skip_dirs_not_in_db(dir_list, self.database)
+            dprint(f'updated dir_list: {dir_list}')
 
-        dprint(f'update dir_list: {dir_list}')
-
-        # try to update each repo, keeing count
-        ttl, successes, failures, failure_list = 0, 0, 0, []
+        ttl, successes, failure_list = 0, 0, []
         for a_dir in sorted(self.database.db_dict):
 
             if dir_list and a_dir not in dir_list:
@@ -43,30 +39,21 @@ class UpdateSubCommand(SubCommand):
                 continue
 
             ttl += 1
-
             repo_type = self.database.db_dict[a_dir]
-
+            # TODO(lee): should we check dir still present
             print_info(f'Updating "{a_dir}" using "{repo_type}"')
-
-            res = update_repo(a_dir, repo_type, self.args)
+            res = update_repo(Path(a_dir).resolve(), repo_type, self.args)
             dprint(f'update_repo: returned: {res}')
-
             if res:
-                failures += 1
                 failure_list.append(a_dir)
             else:
                 successes += 1
-
             if res and self.args.stop_on_error:
-                print_info(
-                    f'Stopping because of error at "{a_dir}"; return={res}')
+                print_info(f'Stopping because of error at "{a_dir}": {res}')
                 sys.exit(1)
 
-            # XXX: mark directory as 'done'
-
-        # remove progress tracking (XXX: huh?)
-
         # print summary report?
+        failures = len(failure_list)
         if not self.args.quiet:
             report_arr = [
                 '"Update" Summary Report',
@@ -83,14 +70,10 @@ class UpdateSubCommand(SubCommand):
 
             print_multiline_info(report_arr)
 
-        # all done
-        subcmd_res = 0
-        if failures:
-            subcmd_res = 1
-        return subcmd_res
+        return 1 if failures else 0
 
     @classmethod
-    def add_options(cls, parser):
+    def add_options(cls, parser: ArgumentParser) -> None:
         """Add options for the "update" subcommand"""
         parser.add_argument('-v', '--verbose',
                             action='store_true',

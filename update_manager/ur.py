@@ -1,23 +1,25 @@
-"""
-Update Repository -- A Tool to make updating a long list of
-repositories easier. For Hack Week 2017!
+"""Update Repository
+
+This is the update repository tool. A Tool to make
+updating a long list of repositories easier. For Hack Week 2017!
 
 Will handle multiiple repository types.
 """
 
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
 
 from update_manager import __version__ as ur_version
 
-from .opts import OPTS
-from .subcmd import handle_subcmd, SUBCMD_DICT
 from .database import Database
+from .opts import OPTS
+from .subcmd import SUBCMD_DICT, handle_subcmd
 from .util import dprint
 
 
 def reformat_subcmd_help(msg: str) -> str:
-    """
-    Reformat subcommand help message, of the form:
+    """Reformat subcommand help message
+
+    Reformat message of the form:
 
     > usage: ur SUBCMD ...
     > ... (more lines)
@@ -38,8 +40,8 @@ def reformat_subcmd_help(msg: str) -> str:
     return '\n'.join(return_lines)
 
 
-def define_parser():
-    """set up parser with subparsers"""
+def define_parser() -> ArgumentParser:
+    """Set up parser with subparsers"""
     parent_parser = ArgumentParser(
         description='For managing repository update and cleaning.',
         formatter_class=RawDescriptionHelpFormatter)
@@ -83,7 +85,8 @@ def define_parser():
         subcmd_help += [reformat_subcmd_help(subcmd_msg)]
 
         #
-        # XXX: this is the shorter version ....
+        # this is the shorter version of subcommand help ....
+        #
         # subcmd_msg = sub_parser.format_usage().split()
         # if subcmd_msg[0] == 'usage:':
         #     subcmd_msg = subcmd_msg[1:]
@@ -95,12 +98,12 @@ def define_parser():
     return parent_parser
 
 
-def parse_args():
+def parse_args() -> (ArgumentParser, Namespace):
     """Parse command-line arguments"""
     parser = define_parser()
     args = parser.parse_args()
     if args.subcommand is None:
-        parser.error('Must supply subcommand')
+        parser.error('must supply subcommand. Use "ur -h" for help')
     OPTS.debug = args.debug
     OPTS.quiet = args.quiet
     OPTS.db_dir = args.db_directory
@@ -109,14 +112,13 @@ def parse_args():
 
 
 def main() -> int:
-    """Main entry point"""
+    """Let's update us some repositories!"""
     (parser, args) = parse_args()
     database = Database(OPTS.db_dir)
     try:
         res = handle_subcmd(database, parser, args)
     except KeyboardInterrupt:
-        print('\nInterrupted')
-        # XXX: clean up?
+        print('\nInterrupted')      # noqa: T201
         return 1
     return res
 

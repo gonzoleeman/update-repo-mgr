@@ -1,4 +1,4 @@
-"""Part of the Update Manager library."""
+"""Part of the Update Manager library"""
 
 from importlib.metadata import version
 

@@ -21,4 +21,22 @@ You can let python3's pip module do the work:
 
     sh> python3 -mpip install --prefix /usr/local --verbose .
 
-Note that you will have to be root to install to prefix "/usr".
+For system-wide installation, you may also wish to set prefix to
+"/usr". You may have to be root to install.
+
+You can also install to a "virtual" environment (under your home
+directory), using:
+
+    sh> python3 -mpip install --verbose -e .
+
+## Testing
+
+To be filled in
+
+## Code Checking
+
+If you change the code, and wish to submit it, you will need to check
+it using "ruff", e.g.:
+
+    sh> ruff check --target-version py313 --preview --config pyproject.toml
+
