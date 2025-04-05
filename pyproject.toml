@@ -20,7 +20,9 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
 ]
 dynamic = ["version"]
-license-files = ["COPYING"]
+
+[project.license-files]
+paths = ["COPYING"]
 
 [project.urls]
 Homepage = "http://github.com/gonzoleeman/update-repo-mgr"
