@@ -7,7 +7,7 @@ name = "ur"
 description = "Script for updating and managing repositories"
 readme = "README.md"
 license = "Apache-2.0"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 authors = [
     {email = "leeman.duncan@gmail.com", name = "Lee Duncan"}
 ]
