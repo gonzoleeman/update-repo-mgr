@@ -32,17 +32,8 @@ but what if the DB has changed since the marker?
 
 I believe it causes an exception?
 
-## add in static type checking (mypy) and pylint
-
-  how to do this automatically?
-
-## add in use of linting too (use "ruff"?)
-
 ## add in ability to scan for repo directories
 
-## fix bug where default directory is hard-coded, even though there
-  is a default value
-  
 ## add ability to specify type of repo (e.g. "git", etc), for
   operations where appropriate (like list, update, clean)
 
@@ -71,10 +62,6 @@ I believe it causes an exception?
   But that's not pythonic
 
 ## Test 'quiet' option -- not sure it does anything
-
-## Find a better way to pass short help and long help (remove them?)
-
-## add subcommand uses absolute path, but other subcommands don't?
 
 ## make "short help" vs "long help" (e.g. use "-l"?)
 
@@ -106,10 +93,6 @@ the "level" option should be limited to [1, 2, 3]
 
 ## the "ur clean" report should include the "level"
 
-## keep database sorted?
-
-it would make accessing it easier
-
-## crete common "report" function
+## create common "report" function
 
 for update and clean to use, since they have almost identical code
