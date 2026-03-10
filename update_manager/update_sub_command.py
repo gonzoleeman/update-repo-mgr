@@ -32,6 +32,7 @@ class UpdateSubCommand(SubCommand):
             dprint(f'updated dir_list: {dir_list}')
 
         ttl, successes, failure_list = 0, 0, []
+        num_entries = len(self.database.db_dict)
         for a_dir in sorted(self.database.db_dict):
 
             if dir_list and a_dir not in dir_list:
@@ -40,8 +41,8 @@ class UpdateSubCommand(SubCommand):
 
             ttl += 1
             repo_type = self.database.db_dict[a_dir]
-            # TODO(lee): should we check dir still present
-            print_info(f'Updating "{a_dir}" using "{repo_type}"')
+            cnt_str = f'{ttl:>3d} of {num_entries:>3d}'
+            print_info(f'{cnt_str}: Updating "{a_dir}" using "{repo_type}"')
             res = update_repo(Path(a_dir).resolve(), repo_type, self.args)
             dprint(f'update_repo: returned: {res}')
             if res:
@@ -85,4 +86,4 @@ class UpdateSubCommand(SubCommand):
                             help='Stop updating on error')
         parser.add_argument('DIRECTORY',
                             nargs='*',
-                            help='Directory to update')
+                            help='Directory(s) to update')

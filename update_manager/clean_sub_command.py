@@ -88,4 +88,4 @@ class CleanSubCommand(SubCommand):
                             help='Set cleaning level [Default 1]')
         parser.add_argument('DIRECTORY',
                             nargs='*',
-                            help='Directory to clean')
+                            help='Directory(s) to clean')

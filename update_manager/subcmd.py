@@ -8,6 +8,7 @@ from .database import Database
 from .list_sub_command import ListSubCommand
 from .rm_sub_command import RmSubCommand
 from .update_sub_command import UpdateSubCommand
+from .discover_sub_command import DiscoverSubCommand
 from .util import dprint
 
 SUBCMD_DICT = {
@@ -16,6 +17,7 @@ SUBCMD_DICT = {
     'rm': RmSubCommand,
     'update': UpdateSubCommand,
     'clean': CleanSubCommand,
+    'discover': DiscoverSubCommand,
     }
 
 
