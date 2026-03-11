@@ -4,8 +4,6 @@ from abc import ABC, abstractmethod
 from argparse import Namespace
 from pathlib import Path
 
-from .util import dprint
-
 
 class Repo(ABC):
     """Repository abstract base class
@@ -15,7 +13,6 @@ class Repo(ABC):
 
     def __init__(self, repo_path: Path, args: Namespace) -> None:
         """Initialize the repository abstract class"""
-        dprint(f'"Repo" super-class init routine: dir={repo_path}')
         self.__repo_path = repo_path
         self.__args = args
 
@@ -41,3 +38,8 @@ class Repo(ABC):
     def args(self) -> Namespace:
         """Return args"""
         return self.__args
+
+    @classmethod
+    @abstractmethod
+    def get_special_dir(cls) -> str:
+        """Return the special directory"""

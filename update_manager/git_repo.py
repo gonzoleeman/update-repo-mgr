@@ -4,7 +4,7 @@ from argparse import Namespace
 from pathlib import Path
 
 from .repo import Repo
-from .util import dprint, run_cmd_in_dir, run_cmd_in_dir_ret_output
+from .util import dprint, run_command
 
 GIT_CLEAN_LEVEL_1 = 1
 GIT_CLEAN_LEVEL_2 = 2
@@ -27,11 +27,10 @@ class GitRepo(Repo):
             dprint('No ".git" subdirectory found')
             return False
         dprint('Checking for remote repository ...')
-        (res, cmd_output) = run_cmd_in_dir_ret_output(repo_path,
-                                                      ['git', 'remote', 'show'])
-        dprint(f'command result: {res}')
-        dprint(f'command output: "{cmd_output!s}"')
-        if cmd_output:
+        ret = run_command('git remote show', cwd=repo_path)
+        dprint(f'command result: {ret.returncode}')
+        dprint(f'command output: "{ret.stdout}"')
+        if ret.stdout:
             dprint('This git repository has a remote')
             return True
         dprint('This git repository is local only -- skipping')
@@ -40,35 +39,39 @@ class GitRepo(Repo):
     def update(self) -> int:
         """Update this git repo"""
         dprint('git update')
-        git_cmd = ['git', 'pull', '--all']
+        git_cmd = 'git pull --all'
         if self.args.verbose:
-            git_cmd.append('-v')
-        git_cmd.append('--prune')
-        return run_cmd_in_dir(self.repo_path, git_cmd)
+            git_cmd += ' -v'
+        git_cmd += ' --prune'
+        ret = run_command(git_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def __clean_remotes(self) -> int:
         """Clean this repo, but don't go crazy: level 2 cleaning"""
-        git_cmd = ['git', 'remote']
+        git_cmd = 'git remote'
         if self.args.verbose:
-            git_cmd.append('-v')
-        git_cmd = [*git_cmd, 'update', '--prune', 'origin']
-        return run_cmd_in_dir(self.repo_path, git_cmd)
+            git_cmd += ' -v'
+        git_cmd += ' update --prune origin'
+        ret = run_command(git_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def __clean_pruning(self) -> int:
         """Do the pruning: level 3 cleaning"""
-        git_cmd = ['git', 'prune']
+        git_cmd = 'git prune'
         if not self.args.verbose:
-            git_cmd.append('-v')
-        return run_cmd_in_dir(self.repo_path, git_cmd)
+            git_cmd += ' -v'
+        ret = run_command(git_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def __clean_gc(self) -> int:
         """Do the garbage collection"""
-        git_cmd = ['git', 'gc']
+        git_cmd = 'git gc'
         if self.args.quiet:
-            git_cmd.append('--quiet')
+            git_cmd += ' --quiet'
         if self.args.level > GIT_CLEAN_LEVEL_1:
-            git_cmd.append('--aggressive')
-        return run_cmd_in_dir(self.repo_path, git_cmd)
+            git_cmd += ' --aggressive'
+        ret = run_command(git_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def clean(self) -> int:
         """Clean this git repo
@@ -105,3 +108,8 @@ class GitRepo(Repo):
                 return res
             return_res = res
         return return_res
+
+    @classmethod
+    def get_special_dir(cls) -> str:
+        """Return our special directory"""
+        return '.git'

@@ -3,7 +3,6 @@
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
 
 from .opts import OPTS
 
@@ -11,87 +10,56 @@ from .opts import OPTS
 def dprint(*args: str) -> None:
     """Debug printing"""
     if OPTS.debug and args:
-        print('DEBUG: ', file=sys.stderr, end='')   # noqa: T201
+        print('DEBUG: ', file=sys.stderr, end='')
         for arg in args:
-            print(arg, file=sys.stderr, end='')     # noqa: T201
-        print(file=sys.stderr)                      # noqa: T201
+            print(arg, file=sys.stderr, end='')
+        print(file=sys.stderr)
 
 
 def eprint(*args: str) -> None:
     """Error printing"""
     if args:
-        print('Error: ', file=sys.stderr, end='')   # noqa: T201
+        print('Error: ', file=sys.stderr, end='')
         for arg in args:
-            print(arg, file=sys.stderr, end='')     # noqa: T201
-        print(file=sys.stderr)  # noqa: T201
+            print(arg, file=sys.stderr, end='')
+        print(file=sys.stderr)
 
 
 def wprint(*args: str) -> None:
     """Warning printing"""
     if args:
-        print('Warning: ', file=sys.stderr, end='') # noqa: T201
+        print('Warning: ', file=sys.stderr, end='')
         for arg in args:
-            print(arg, file=sys.stderr, end='')     # noqa: T201
-        print(file=sys.stderr)                      # noqa: T201
+            print(arg, file=sys.stderr, end='')
+        print(file=sys.stderr)
 
 
 def print_info(*args: str) -> None:
     """Print informational message"""
     if not OPTS.quiet:
-        print('***')                                # noqa: T201
-        print('*** ', end='')                       # noqa: T201
+        print('***')
+        print('*** ', end='')
         for arg in args:
-            print(arg + ' ', end='')                # noqa: T201
-        print()                                     # noqa: T201
-        print('***')                                # noqa: T201
+            print(arg + ' ', end='')
+        print()
+        print('***')
 
 
 def print_multiline_info(lines: list[str]) -> None:
     """Print an informational message that is more than one line"""
     if not OPTS.quiet:
-        print('***')                                # noqa: T201
+        print('***')
         for a_line in lines:
-            print('*** ' + a_line)                  # noqa: T201
-        print('***')                                # noqa: T201
+            print('*** ' + a_line)
+        print('***')
 
 
-def run_cmd_in_dir(dir_path: Path, cmd_arr: list[str]) -> int:
-    """'cd' to 'dir_path', then run command
-
-    Wait for the result
-    """
-    cmd_str = ' '.join(cmd_arr)
-    dprint(f'Running (dir={dir_path}) cmd: "{cmd_str}"')
-    my_proc = subprocess.Popen(cmd_arr, cwd=dir_path)
-    my_proc.communicate()
-    wstat = my_proc.returncode
-    if wstat != 0:
-        dprint(f'error: ret_stat={wstat}')
-        print_info(f'warning: "{cmd_str}" in {dir_path} failed')
-    return wstat
-
-
-def run_cmd_in_dir_ret_output(dir_path: Path,
-                              cmd_arr: list[str]) -> tuple[int | Any, bytes]:
-    """'cd' to dir_path, then run command
-
-    Wait for result
-
-    Also, the output will not be displayed but instead will be
-    returned to the caller together with the exit status
-    """
-    cmd_str = ' '.join(cmd_arr)
-    dprint(f'Running [save output] (dir={dir_path}) cmd: "{cmd_str}"')
-    my_proc = subprocess.Popen(cmd_arr, cwd=dir_path, stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
-    (std_output, err_output) = my_proc.communicate()
-    if std_output:
-        dprint(f'std_output: {std_output!s}')
-    if err_output:
-        dprint(f'err_output: {err_output!s}')
-    wstat = my_proc.returncode
-    dprint(f'wstat= {wstat}')
-    if wstat != 0:
-        dprint(f'error: ret_stat= {wstat}')
-        print_info(f'warning: "{cmd_str}" in {dir_path} failed')
-    return (wstat, std_output)
+def run_command(command: str, cwd: Path | None = None):
+    """Run a command, with optional input and output supplied."""
+    ret = subprocess.run(command.split(), encoding='utf-8',
+                         capture_output=True, shell=False,
+                         check=False, cwd=cwd)
+    if ret.returncode != 0:
+        dprint(f'error: ret_stat={ret.returncode}')
+        print_info(f'warning: "{command}" in {cwd} failed')
+    return ret

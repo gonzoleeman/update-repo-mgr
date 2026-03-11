@@ -4,7 +4,7 @@ from argparse import Namespace
 from pathlib import Path
 
 from .repo import Repo
-from .util import dprint, run_cmd_in_dir
+from .util import dprint, run_command
 
 
 class OscRepo(Repo):
@@ -25,10 +25,16 @@ class OscRepo(Repo):
     def update(self) -> int:
         """Update this osc repo"""
         dprint('osc update')
-        osc_cmd = ['osc', '-v', 'update'] if self.args.verbose else ['osc', 'update']
-        return run_cmd_in_dir(self.repo_path, osc_cmd)
+        osc_cmd = 'osc -v update' if self.args.verbose else 'osc update'
+        ret = run_command(osc_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def clean(self) -> int:
         """Clean this osc repo"""
         dprint('osc clean: NOP')
         return 0
+
+    @classmethod
+    def get_special_dir(cls) -> str:
+        """Return our special directory"""
+        return '.osc'

@@ -70,14 +70,13 @@ def define_parser() -> ArgumentParser:
 
     subparsers = parent_parser.add_subparsers(dest='subcommand')
     subcmd_help = ['subcommand usage:\n', '\n']
-    for subcmd_name in SUBCMD_DICT:
+    for (subcmd_name, subcmd_class) in SUBCMD_DICT.items():
         sub_parser = subparsers.add_parser(
             subcmd_name,
             add_help=False,
-            description=SUBCMD_DICT[subcmd_name].__doc__,
-            help=SUBCMD_DICT[subcmd_name].__doc__)
+            description=subcmd_class.__doc__,
+            help=subcmd_class.__doc__)
         # call class method to set up arguments for this class
-        subcmd_class = SUBCMD_DICT[subcmd_name]
         subcmd_class.add_options(sub_parser)
 
         # set up subcommand usage
@@ -118,6 +117,6 @@ def main() -> int:
     try:
         res = handle_subcmd(database, parser, args)
     except KeyboardInterrupt:
-        print('\nInterrupted')      # noqa: T201
+        print('\nInterrupted')
         return 1
     return res

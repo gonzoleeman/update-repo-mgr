@@ -5,10 +5,10 @@ from argparse import ArgumentParser, Namespace
 from .add_sub_command import AddSubCommand
 from .clean_sub_command import CleanSubCommand
 from .database import Database
+from .discover_sub_command import DiscoverSubCommand
 from .list_sub_command import ListSubCommand
 from .rm_sub_command import RmSubCommand
 from .update_sub_command import UpdateSubCommand
-from .discover_sub_command import DiscoverSubCommand
 from .util import dprint
 
 SUBCMD_DICT = {

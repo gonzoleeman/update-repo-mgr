@@ -30,9 +30,11 @@ class UpdateSubCommand(SubCommand):
             # validate directories
             dir_list = skip_dirs_not_in_db(dir_list, self.database)
             dprint(f'updated dir_list: {dir_list}')
+            num_entries = len(dir_list)
+        else:
+            num_entries = len(self.database.db_dict)
 
         ttl, successes, failure_list = 0, 0, []
-        num_entries = len(self.database.db_dict)
         for a_dir in sorted(self.database.db_dict):
 
             if dir_list and a_dir not in dir_list:

@@ -22,6 +22,7 @@ DB_HEADER_LEN = len(DB_HEADER)
 
 DB_FILE_COLUMNS = 2
 
+
 class Database:
     """Represents the database for the update manager"""
 
@@ -79,13 +80,13 @@ class Database:
         dprint('Printing DB lines: repo-type repo-path')
         for a_key in sorted(self.db_dict):
             a_value = self.db_dict[a_key]
-            print(f'{a_value}\t{a_key}')     # noqa: T201
+            print(f'{a_value}\t{a_key}')
 
     def print_list_short(self) -> None:
         """Print the list of directories from our database"""
         dprint('Printing DB lines: repo-path')
         for a_key in sorted(self.db_dict):
-            print(a_key)                    # noqa: T201
+            print(a_key)
 
     def entry_present(self, repo_path: Path) -> bool:
         """Is this entry already present?"""

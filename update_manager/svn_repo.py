@@ -4,7 +4,7 @@ from argparse import Namespace
 from pathlib import Path
 
 from .repo import Repo
-from .util import dprint, run_cmd_in_dir
+from .util import dprint, run_command
 
 
 class SvnRepo(Repo):
@@ -25,12 +25,16 @@ class SvnRepo(Repo):
     def update(self) -> int:
         """Update this svn repo (NOP)"""
         dprint('svn update')
-        svn_cmd = ['svn', 'update']
-        if self.args.quiet:
-            svn_cmd.append('-q')
-        return run_cmd_in_dir(self.repo_path, svn_cmd)
+        svn_cmd = 'svn update -v' if self.args.quiet else 'svn update'
+        ret = run_command(svn_cmd, cwd=self.repo_path)
+        return ret.returncode
 
     def clean(self) -> int:
         """Update this svn repo (NOP)"""
         dprint('svn clean: NOP')
         return 0
+
+    @classmethod
+    def get_special_dir(cls) -> str:
+        """Return our special directory"""
+        return '.svn'

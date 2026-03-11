@@ -27,7 +27,7 @@ def find_owner(repo_path: Path) -> str | None:
     calling each revision object until one of them clains it.
     """
     for (repo_type, repo_obj) in __REPO_DICT.items():
-        dprint(f'Looking at repo list entry, type={repo_type}')
+        dprint(f'Looking at repo list entry (for owner), type={repo_type}')
         # call class method to see if this class wants this directory
         if repo_obj.is_mine(repo_path):
             dprint(f'Found a match for repo_path={repo_path}')
@@ -62,3 +62,13 @@ def clean_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
                'Consider using the "rm" subcommand to remove it')
         return 1
     return res
+
+
+def get_repo_special_dir_names() -> list[str]:
+    """Return a list of special repo directory names"""
+    spcl_dir_list = []
+    for (repo_type, repo_obj) in __REPO_DICT.items():
+        dprint(f'Looking at repo list entry (for spcl dir), type={repo_type}')
+        nm = repo_obj.get_special_dir()
+        spcl_dir_list.append(nm)
+    return spcl_dir_list
