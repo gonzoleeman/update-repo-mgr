@@ -1,4 +1,4 @@
-"""Database class for update manager
+"""Database class for update manager.
 
 We use a file as a "database". There are two columes.
 
@@ -24,10 +24,10 @@ DB_FILE_COLUMNS = 2
 
 
 class Database:
-    """Represents the database for the update manager"""
+    """Represents the database for the update manager."""
 
     def __init__(self, db_dir: str) -> None:
-        """Set up the database class"""
+        """Set up the database class."""
         self.__ur_path = Path(getenv('UR_DIR', db_dir)).expanduser()
         self.ensure_ur_dir()
         self.__db_path = self.__ur_path / DB_FILE
@@ -36,11 +36,11 @@ class Database:
 
     @property
     def db_dict(self) -> dict:
-        """Return the database dictionary"""
+        """Return the database dictionary."""
         return self.__db_dict
 
     def ensure_ur_dir(self) -> None:
-        """Create the 'ur' directory, if needed"""
+        """Create the 'ur' directory, if needed."""
         if not self.__ur_path.is_dir():
             print_info(f'No DB dir ... creating one ({self.__ur_path}) ...')
             try:
@@ -50,7 +50,7 @@ class Database:
                 sys.exit(1)
 
     def read_and_validate_db_file(self) -> None:
-        """Read DB file and validate header is correct"""
+        """Read DB file and validate header is correct."""
         dprint(f'Reading DB file ({self.__db_path})')
         with self.__db_path.open(encoding='utf_8') as dbf:
             hdr = dbf.read(DB_HEADER_LEN)
@@ -68,7 +68,7 @@ class Database:
         dprint(f'resulting db_dict: {self.db_dict}')
 
     def ensure_valid_db_file(self) -> None:
-        """Ensure the database isn't corrupt"""
+        """Ensure the database isn't corrupt."""
         if not self.__db_path.is_file():
             dprint('Initializing DB file with header ...')
             self.__db_path.write_text(DB_HEADER, encoding='utf_8')
@@ -76,37 +76,45 @@ class Database:
             self.read_and_validate_db_file()
 
     def print_list_long(self) -> None:
-        """Print the list of repo types and directories from our database"""
+        """Print the list of repo types and directories from our database."""
         dprint('Printing DB lines: repo-type repo-path')
         for a_key in sorted(self.db_dict):
             a_value = self.db_dict[a_key]
             print(f'{a_value}\t{a_key}')
 
     def print_list_short(self) -> None:
-        """Print the list of directories from our database"""
+        """Print the list of directories from our database."""
         dprint('Printing DB lines: repo-path')
         for a_key in sorted(self.db_dict):
             print(a_key)
 
     def entry_present(self, repo_path: Path) -> bool:
-        """Is this entry already present?"""
+        """Return if entry already present.
+
+        Arguments:
+            repo_path:  the path to look for
+
+        Returns:
+            true iff entry was found
+
+        """
         dprint(f'Looking for "{repo_path}" in dir list')
         return repo_path in self.db_dict
 
     def add_to_list(self, repo_path: Path, repo_type: str) -> None:
-        """Add a directory entry to our database"""
+        """Add a directory entry to our database."""
         dprint(f'Adding DB entry: "{repo_type}\t{repo_path}"')
         self.db_dict[str(repo_path)] = repo_type
         self.write_out_db_file()
 
     def rm_from_list(self, repo_path: Path) -> None:
-        """Remove a repo directory from our database"""
+        """Remove a repo directory from our database."""
         dprint(f'Removing ...DB entry for: {repo_path}')
         del self.db_dict[repo_path]
         self.write_out_db_file()
 
     def write_out_db_file(self) -> None:
-        """Write out the DB file, so our cache is flushed"""
+        """Write out the DB file, so our cache is flushed."""
         dprint('Writing out DB file ...')
         with Path(self.__db_path).open(mode='w', encoding='utf_8') as dbf:
             dbf.write(DB_HEADER)
@@ -118,7 +126,16 @@ class Database:
 
 
 def skip_dirs_not_in_db(dir_list: list[str], db: Database) -> list[str]:
-    """Return dir_list with dirs not in the DB removed"""
+    """Return dir_list with dirs not in the DB removed.
+
+    Arguments:
+        dir_list:       list of directories
+        db:             the database
+
+    Returns:
+        a list of dirs not skipped.
+
+    """
     res_dir_list = []
     for a_dir in dir_list:
         if a_dir not in db.db_dict:

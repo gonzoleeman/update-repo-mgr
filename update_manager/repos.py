@@ -1,7 +1,9 @@
-"""Top-level interface for all repository classes
+"""Top-level interface for all repository classes.
 
 This should be the only place that knows about individual
 repo types and abstracts it for others.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
 """
 
 from argparse import Namespace
@@ -25,6 +27,13 @@ def find_owner(repo_path: Path) -> str | None:
 
     Find out which revision control system 'owns' this directory by
     calling each revision object until one of them clains it.
+
+    Arguments:
+        repo_path:      path to find owner of
+
+    Returns:
+        owner name if found, else None
+
     """
     for (repo_type, repo_obj) in __REPO_DICT.items():
         dprint(f'Looking at repo list entry (for owner), type={repo_type}')
@@ -36,8 +45,18 @@ def find_owner(repo_path: Path) -> str | None:
 
 
 def update_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
-    """Update a repo"""
-    dprint(f'update_repo called ({repo_path}, {repo_type}, {args})')
+    """Update a repo.
+
+    Arguments:
+        repo_path:      repo path to be updated
+        repo_type:      type of the repo
+        args:           from option parsing
+
+    Returns:
+        0 on success else non-zero
+
+    """
+    dprint(f'update_repo: called ({repo_path}, {repo_type}, {args})')
 
     try:
         repo_obj = __REPO_DICT[repo_type](repo_path, args)
@@ -51,8 +70,18 @@ def update_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
 
 
 def clean_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
-    """Clean a repo"""
-    dprint(f'update_repo called ({repo_path}, {repo_type})')
+    """Clean a repo.
+
+    Arguments:
+        repo_path:      repo path to be updated
+        repo_type:      type of the repo
+        args:           from option parsing
+
+    Returns:
+        0 on success else non-zero
+
+    """
+    dprint(f'clean_repo: called ({repo_path}, {repo_type})')
     repo_obj = __REPO_DICT[repo_type]
     try:
         repo = repo_obj(repo_path, args)
@@ -65,7 +94,12 @@ def clean_repo(repo_path: Path, repo_type: str, args: Namespace) -> int:
 
 
 def get_repo_special_dir_names() -> list[str]:
-    """Return a list of special repo directory names"""
+    """Return a list of special repo directory names.
+
+    Returns:
+        a list of repo name strings
+
+    """
     spcl_dir_list = []
     for (repo_type, repo_obj) in __REPO_DICT.items():
         dprint(f'Looking at repo list entry (for spcl dir), type={repo_type}')

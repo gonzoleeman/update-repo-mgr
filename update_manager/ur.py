@@ -1,9 +1,11 @@
-"""Update Repository
+"""Update Repository.
 
 This is the update repository tool. A Tool to make
 updating a long list of repositories easier. For Hack Week 2017!
 
 Will handle multiiple repository types.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
 """
 
 from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
@@ -17,7 +19,7 @@ from .util import dprint
 
 
 def reformat_subcmd_help(msg: str) -> str:
-    """Reformat subcommand help message
+    """Reformat subcommand help message.
 
     Reformat message of the form:
 
@@ -27,6 +29,13 @@ def reformat_subcmd_help(msg: str) -> str:
     by: * replacing "^usage: " with "> "
         * indenting all lines 4 spaces
         * adding a blank line at the end
+
+    Arguments:
+        msg:    the help message to reformat
+
+    Returns:
+        reformatted message
+
     """
     lines = msg.splitlines()
     return_lines = []
@@ -41,7 +50,12 @@ def reformat_subcmd_help(msg: str) -> str:
 
 
 def define_parser() -> ArgumentParser:
-    """Set up parser with subparsers"""
+    """Set up parser with subparsers.
+
+    Returns:
+        the argument parser instance we create
+
+    """
     parent_parser = ArgumentParser(
         description='For managing repository update and cleaning.',
         formatter_class=RawDescriptionHelpFormatter)
@@ -83,22 +97,18 @@ def define_parser() -> ArgumentParser:
         subcmd_msg = sub_parser.format_help()
         subcmd_help += [reformat_subcmd_help(subcmd_msg)]
 
-        #
-        # this is the shorter version of subcommand help ....
-        #
-        # subcmd_msg = sub_parser.format_usage().split()
-        # if subcmd_msg[0] == 'usage:':
-        #     subcmd_msg = subcmd_msg[1:]
-        # subcmd_help += [4 * ' ' + ' '.join(subcmd_msg)]
-        #
-
     parent_parser.epilog = ''.join(subcmd_help)
 
     return parent_parser
 
 
 def parse_args() -> tuple[ArgumentParser, Namespace]:
-    """Parse command-line arguments"""
+    """Parse command-line arguments.
+
+    Returns:
+        the parser we create, and the args it parses
+
+    """
     parser = define_parser()
     args = parser.parse_args()
     if args.subcommand is None:
@@ -111,7 +121,12 @@ def parse_args() -> tuple[ArgumentParser, Namespace]:
 
 
 def main() -> int:
-    """Let's update us some repositories!"""
+    """Let's update us some repositories!.
+
+    Returns:
+        0 on success else non-zero
+
+    """
     (parser, args) = parse_args()
     database = Database(OPTS.db_dir)
     try:

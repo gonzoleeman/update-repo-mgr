@@ -1,4 +1,7 @@
-"""The 'add' subcommand"""
+"""The 'add' subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
@@ -10,17 +13,21 @@ from .util import dprint, eprint, print_info
 
 
 class AddSubCommand(SubCommand):
-    """Add one or more repositories to the database"""
+    """Add one or more repositories to the database."""
 
     def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
-        """Initialize an add subcommand instance"""
+        """Initialize an add subcommand instance."""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"add" subcommand init routine, args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'add' subcommand
+        """Handle the 'add' subcommand.
 
-        At least one directory name is expected
+        At least one directory name is expected.
+
+        Returns:
+            zero for success, else 1
+
         """
         dir_list = self.args.DIRECTORY
         dprint(f'handle_command("add", dir_list={dir_list}) called')
@@ -47,7 +54,13 @@ class AddSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add appropriate options"""
+        """Add appropriate options.
+
+        Arguments:
+            cls:        our class
+            parser:     the argument parser to use
+
+        """
         parser.add_argument('DIRECTORY',
                             nargs='+',
                             help='Directory to add')

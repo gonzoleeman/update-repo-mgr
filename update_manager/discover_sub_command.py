@@ -1,4 +1,7 @@
-"""The 'discover' subcommand"""
+"""The 'discover' subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 import re
 from argparse import ArgumentParser, Namespace
@@ -20,7 +23,12 @@ class DiscoverSubCommand(SubCommand):
         dprint(f'"discover" subcommand init routine, args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'discover' subcommand"""
+        """Handle the 'discover' subcommand.
+
+        Returns:
+            0 for success, else 1
+
+        """
         dir_to_use = self.args.DIRECTORY
         dprint(f'handle_command("discover", dir_to_use={dir_to_use}) called')
         dprint(f'Discover: Looking under directory {dir_to_use}')
@@ -113,7 +121,7 @@ class DiscoverSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add options for the "clean" subcommand"""
+        """Add options for the "clean" subcommand."""
         parser.add_argument('-v', '--verbose',
                             action='store_true',
                             default=False,

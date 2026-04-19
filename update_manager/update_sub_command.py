@@ -1,4 +1,7 @@
-"""The 'update' subcommand"""
+"""The 'update' subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 import sys
 from argparse import ArgumentParser, Namespace
@@ -11,18 +14,22 @@ from .util import dprint, print_info, print_multiline_info
 
 
 class UpdateSubCommand(SubCommand):
-    """Update one or more repo directories"""
+    """Update one or more repo directories."""
 
     def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
-        """Initialize instance of the update subcomand class"""
+        """Initialize instance of the update subcomand class."""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"update" subcommand init routine, args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'update' subcommand
+        """Handle the 'update' subcommand.
 
         If directory names are specfied, we update each one if
         it exists. If none are specified we updated all in the DB.
+
+        Returns:
+            0 on success else 1
+
         """
         dir_list = self.args.DIRECTORY
         dprint(f'handle_command("update", dir_list={dir_list}) called')
@@ -77,7 +84,12 @@ class UpdateSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add options for the "update" subcommand"""
+        """Add options for the "update" subcommand.
+
+        Arguments:
+            parser:     option parser instance
+
+        """
         parser.add_argument('-v', '--verbose',
                             action='store_true',
                             default=False,

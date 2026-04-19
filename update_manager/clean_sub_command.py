@@ -1,4 +1,7 @@
-"""The 'clean' subcommand"""
+"""The 'clean' subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 import sys
 from argparse import ArgumentParser, Namespace
@@ -11,7 +14,7 @@ from .util import dprint, print_info, print_multiline_info
 
 
 class CleanSubCommand(SubCommand):
-    """Clean one or more repository directories"""
+    """Clean one or more repository directories."""
 
     def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
         """Initialize clean subcommand."""
@@ -19,7 +22,12 @@ class CleanSubCommand(SubCommand):
         dprint(f'"clean" subcommand init routine, args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'clean' subcommand"""
+        """Handle the 'clean' subcommand.
+
+        Returns:
+            zero for success, else 1
+
+        """
         # TODO(lee): we ignore errors in 'clean'?
         dir_list = self.args.DIRECTORY
         dprint(f'handle_command("clean", dir_list={dir_list}) called')
@@ -27,6 +35,9 @@ class CleanSubCommand(SubCommand):
             # validate directories
             dir_list = skip_dirs_not_in_db(dir_list, self.database)
             dprint(f'updated dir_list: {dir_list}')
+            num_entries = len(dir_list)
+        else:
+            num_entries = len(self.database.db_dict)
 
         ttl, successes, failure_list = 0, 0, []
         for a_dir in sorted(self.database.db_dict):
@@ -37,8 +48,8 @@ class CleanSubCommand(SubCommand):
 
             ttl += 1
             repo_type = self.database.db_dict[a_dir]
-            # TODO(lee): should we check dir still present
-            print_info(f'"Cleaning "{a_dir}" using "{repo_type}"')
+            cnt_str = f'{ttl:>3d} of {num_entries:>3d}'
+            print_info(f'{cnt_str}: Cleaning "{a_dir}" using "{repo_type}"')
             res = clean_repo(Path(a_dir).resolve(), repo_type, self.args)
             dprint(f'clean_repo: returned: {res}')
             if res:
@@ -73,7 +84,7 @@ class CleanSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add options for the "clean" subcommand"""
+        """Add options for the "clean" subcommand."""
         parser.add_argument('-v', '--verbose',
                             action='store_true',
                             default=False,

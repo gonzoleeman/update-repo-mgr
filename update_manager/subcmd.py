@@ -1,4 +1,7 @@
-"""Subcommand interface"""
+"""Subcommand interface.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 from argparse import ArgumentParser, Namespace
 
@@ -22,7 +25,17 @@ SUBCMD_DICT = {
 
 
 def handle_subcmd(database: Database, parser: ArgumentParser, args: Namespace) -> int:
-    """Handle the validated subcommand"""
+    """Handle the validated subcommand.
+
+    Arguments:
+        database:   our database instance
+        parser:     the argument parser instance
+        args:       from option parsing
+
+    Returns:
+        0 on success else non-zero
+
+    """
     subcmd_name = args.subcommand
     dprint(f'handle_subcmd({subcmd_name}): entered')
     # create an instance of our subcommand class

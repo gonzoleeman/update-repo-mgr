@@ -1,6 +1,9 @@
-"""Utility routines for update repository"""
+"""Utility routines for update repository.
 
-import subprocess
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
+
+import subprocess  # noqa: S404
 import sys
 from pathlib import Path
 
@@ -8,7 +11,7 @@ from .opts import OPTS
 
 
 def dprint(*args: str) -> None:
-    """Debug printing"""
+    """Debug printing."""
     if OPTS.debug and args:
         print('DEBUG: ', file=sys.stderr, end='')
         for arg in args:
@@ -17,7 +20,12 @@ def dprint(*args: str) -> None:
 
 
 def eprint(*args: str) -> None:
-    """Error printing"""
+    """Error printing.
+
+    Arguments:
+        args:   argument(s) to print
+
+    """
     if args:
         print('Error: ', file=sys.stderr, end='')
         for arg in args:
@@ -26,7 +34,12 @@ def eprint(*args: str) -> None:
 
 
 def wprint(*args: str) -> None:
-    """Warning printing"""
+    """Warning printing.
+
+    Arguments:
+        args:   argument(s) to print
+
+    """
     if args:
         print('Warning: ', file=sys.stderr, end='')
         for arg in args:
@@ -35,7 +48,12 @@ def wprint(*args: str) -> None:
 
 
 def print_info(*args: str) -> None:
-    """Print informational message"""
+    """Print informational message.
+
+    Arguments:
+        args:   argument(s) to print
+
+    """
     if not OPTS.quiet:
         print('***')
         print('*** ', end='')
@@ -46,7 +64,12 @@ def print_info(*args: str) -> None:
 
 
 def print_multiline_info(lines: list[str]) -> None:
-    """Print an informational message that is more than one line"""
+    """Print an informational message that is more than one line.
+
+    Arguments:
+        lines:      the lines to print
+
+    """
     if not OPTS.quiet:
         print('***')
         for a_line in lines:
@@ -54,11 +77,24 @@ def print_multiline_info(lines: list[str]) -> None:
         print('***')
 
 
-def run_command(command: str, cwd: Path | None = None):
-    """Run a command, with optional input and output supplied."""
-    ret = subprocess.run(command.split(), encoding='utf-8',
-                         capture_output=True, shell=False,
-                         check=False, cwd=cwd)
+def run_command(command: str, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+    """Run a command, with optional input and output supplied..
+
+    Arguments:
+        command:        the command to run, as a string
+        cwd:            the path to 'cd' to for this command (if any)
+
+    Returns:
+        A CompletedProcess instance
+
+    """
+    dprint(f'Running command: {command} ...')
+    ret = subprocess.run(command.split(),   # noqa: S603
+                         encoding='utf-8',
+                         capture_output=True,
+                         shell=False,
+                         check=False,
+                         cwd=cwd)
     if ret.returncode != 0:
         dprint(f'error: ret_stat={ret.returncode}')
         print_info(f'warning: "{command}" in {cwd} failed')

@@ -1,4 +1,7 @@
-"""The 'list' subcommand"""
+"""The 'list' subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 from argparse import ArgumentParser, Namespace
 
@@ -8,17 +11,21 @@ from .util import dprint
 
 
 class ListSubCommand(SubCommand):
-    """List directories being managed"""
+    """List directories being managed."""
 
     def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
-        """Initialize list subcommand instance"""
+        """Initialize list subcommand instance."""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'List subcommand init routine: args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'list' subcommand
+        """Handle the 'list' subcommand.
 
         No directory names are expected
+
+        Returns:
+            0 as we always succeed
+
         """
         dprint('handle_command("list")')
         if self.args.long:
@@ -29,7 +36,7 @@ class ListSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add appropriate options"""
+        """Add appropriate options."""
         parser.add_argument('-l', '--long',
                             action='store_true',
                             default=False,

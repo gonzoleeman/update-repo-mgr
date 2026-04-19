@@ -1,4 +1,7 @@
-"""The 'rm' (remove) subcommand"""
+"""The 'rm' (remove) subcommand.
+
+Copyright 2026, Lee Duncan, All Rights Reserved.
+"""
 
 from argparse import ArgumentParser, Namespace
 
@@ -8,17 +11,21 @@ from .util import dprint, eprint, print_info
 
 
 class RmSubCommand(SubCommand):
-    """Remove one or more repositories from the database"""
+    """Remove one or more repositories from the database."""
 
     def __init__(self, database: Database, parser: ArgumentParser, args: Namespace) -> None:
-        """Initialize a Rm subcommand instance"""
+        """Initialize a Rm subcommand instance."""
         SubCommand.__init__(self, database, parser, args)
         dprint(f'"rm" subcommand init routine, args={args}')
 
     def handle_command(self) -> int:
-        """Handle the 'rm' (remove) subcommand
+        """Handle the 'rm' (remove) subcommand.
 
-        At least one directory name is expected
+        At least one repo directory name is expected
+
+        Returns:
+            0 on success else non-zero
+
         """
         dir_list = self.args.DIRECTORY
         dprint(f'handle_command("rm", dir_list={dir_list}) called')
@@ -38,7 +45,12 @@ class RmSubCommand(SubCommand):
 
     @classmethod
     def add_options(cls, parser: ArgumentParser) -> None:
-        """Add appropriate options"""
+        """Add appropriate options.
+
+        Arguments:
+            parser:     from option parsing
+
+        """
         parser.add_argument('DIRECTORY',
                             nargs='+',
                             help='Directory to remove')
